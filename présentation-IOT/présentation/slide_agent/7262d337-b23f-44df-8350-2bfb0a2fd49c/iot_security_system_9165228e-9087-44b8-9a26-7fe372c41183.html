@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nœuds de Fonction Node-RED - IoT Security System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hexagon {
+            position: absolute;
+            width: 200px;
+            height: 173px;
+            background: rgba(56, 189, 248, 0.05);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        .circuit-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0.3) 50%, rgba(56, 189, 248, 0.1) 100%);
+            z-index: 0;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .function-node {
+            background: rgba(20, 30, 48, 0.8);
+            border-radius: 10px;
+            border-left: 4px solid;
+            padding: 12px;
+            margin-bottom: 16px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .function-node:hover {
+            transform: translateX(5px);
+        }
+
+        .code-block {
+            font-family: 'Courier New', monospace;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 5px;
+            padding: 10px 12px;
+            border-left: 3px solid;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            margin-right: 16px;
+        }
+
+        .glow {
+            animation: glow-animation 3s infinite alternate;
+        }
+
+        @keyframes glow-animation {
+            0% {
+                box-shadow: 0 0 5px rgba(56, 189, 248, 0.3);
+            }
+            100% {
+                box-shadow: 0 0 20px rgba(56, 189, 248, 0.7);
+            }
+        }
+
+        .pulse {
+            position: relative;
+        }
+
+        .pulse::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.7);
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% {
+                box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(248, 113, 113, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(248, 113, 113, 0);
+            }
+        }
+
+        .highlight {
+            display: inline-block;
+            position: relative;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            bottom: -2px;
+            left: 0;
+            background-color: #F59E0B;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide flex flex-col p-10 relative">
+        <!-- Background Elements -->
+        <div class="hexagon opacity-20" style="top: 100px; left: 150px; transform: rotate(15deg);"></div>
+        <div class="hexagon opacity-30" style="top: 400px; right: 180px; transform: rotate(-10deg);"></div>
+        <div class="hexagon opacity-15" style="bottom: 80px; left: 300px; transform: rotate(5deg);"></div>
+
+        <!-- Circuit Lines -->
+        <div class="circuit-line" style="width: 300px; top: 180px; left: 100px; transform: rotate(15deg);"></div>
+        <div class="circuit-line" style="width: 250px; top: 480px; right: 150px; transform: rotate(-8deg);"></div>
+        <div class="circuit-line" style="width: 320px; bottom: 120px; left: 200px; transform: rotate(-12deg);"></div>
+
+        <!-- Header -->
+        <div class="mb-6 z-10">
+            <h1 class="text-4xl font-bold text-white mb-2">Nœuds de Fonction Node-RED</h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-amber-500 to-amber-300"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-2 gap-6 z-10">
+            <!-- Left Column - Function Types -->
+            <div class="flex flex-col">
+                <!-- Intrusion Detection Function -->
+                <div class="function-node" style="border-left-color: #F87171;">
+                    <div class="flex items-center mb-3">
+                        <div class="feature-icon bg-red-500 bg-opacity-20 pulse">
+                            <i class="fas fa-search text-2xl text-red-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white">Détection de Mots-clés</h3>
+                            <p class="text-sm text-gray-300">Analyse sémantique des logs Suricata</p>
+                        </div>
+                    </div>
+                    <div class="code-block" style="border-left-color: #F87171;">
+                        <span class="text-purple-400">function</span> <span class="text-sky-300">detectIntrusion</span>(<span class="text-amber-300">msg</span>) {
+                        <span class="text-purple-400">const</span> <span class="text-sky-300">keywords</span> = [<span class="text-green-300">"suspicious"</span>, <span class="text-green-300">"intrusion"</span>, <span class="text-green-300">"attack"</span>];
+                        <span class="text-purple-400">const</span> <span class="text-sky-300">logContent</span> = <span class="text-amber-300">msg.payload</span>;
+
+                        <span class="text-purple-400">for</span>(<span class="text-purple-400">let</span> <span class="text-sky-300">keyword</span> <span class="text-purple-400">of</span> <span class="text-sky-300">keywords</span>) {
+                        <span class="text-purple-400">if</span>(<span class="text-sky-300">logContent</span>.includes(<span class="text-sky-300">keyword</span>)) {
+                        <span class="text-amber-300">msg.threat</span> = <span class="text-green-300">"high"</span>;
+                        <span class="text-purple-400">return</span> <span class="text-amber-300">msg</span>; } }
+                        <span class="text-purple-400">return</span> <span class="text-amber-300">null</span>; }
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- Twilio SMS Function -->
+                <div class="function-node mt-4" style="border-left-color: #8B5CF6;">
+                    <div class="flex items-center mb-3">
+                        <div class="feature-icon bg-purple-500 bg-opacity-20 glow">
+                            <i class="fas fa-mobile-alt text-2xl text-purple-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white">Génération de SMS</h3>
+                            <p class="text-sm text-gray-300">Alertes Twilio en temps réel</p>
+                        </div>
+                    </div>
+                    <div class="code-block" style="border-left-color: #8B5CF6;">
+                        <span class="text-purple-400">function</span> <span class="text-sky-300">createTwilioMessage</span>(<span class="text-amber-300">msg</span>) {
+                        <span class="text-gray-400">// Format utile pour Twilio</span>
+                        <span class="text-amber-300">msg.payload</span> = {
+                        <span class="text-green-300">"to"</span>: <span class="text-green-300">"+33612345678"</span>,
+                        <span class="text-green-300">"body"</span>: <span class="text-green-300">`ALERTE: Intrusion détectée! 
+Type: ${</span><span class="text-amber-300">msg.alert.type</span><span class="text-green-300">}
+IP Source: ${</span><span class="text-amber-300">msg.alert.source_ip</span><span class="text-green-300">}`</span> };
+                        <span class="text-purple-400">return</span> <span class="text-amber-300">msg</span>; }
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Log Parser and Overview -->
+            <div class="flex flex-col">
+                <!-- Log Parser Function -->
+                <div class="function-node" style="border-left-color: #38BDF8;">
+                    <div class="flex items-center mb-3">
+                        <div class="feature-icon bg-sky-500 bg-opacity-20">
+                            <i class="fas fa-file-code text-2xl text-sky-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white">Analyse de Logs</h3>
+                            <p class="text-sm text-gray-300">Parsing ligne par ligne des logs Suricata</p>
+                        </div>
+                    </div>
+                    <div class="code-block" style="border-left-color: #38BDF8;">
+                        <span class="text-purple-400">function</span> <span class="text-sky-300">parseSuricataLog</span>(<span class="text-amber-300">msg</span>) {
+                        <span class="text-purple-400">const</span> <span class="text-sky-300">logLine</span> = <span class="text-amber-300">msg.payload</span>;
+                        <span class="text-purple-400">const</span> <span class="text-sky-300">regex</span> = <span class="text-green-300">/\[(.*?)\] \[(.*?)\] (.*?) \[/</span>;
+                        <span class="text-purple-400">const</span> <span class="text-sky-300">matches</span> = <span class="text-sky-300">logLine</span>.match(<span class="text-sky-300">regex</span>);
+
+                        <span class="text-purple-400">if</span> (<span class="text-sky-300">matches</span>) {
+                        <span class="text-amber-300">msg.alert</span> = {
+                        <span class="text-green-300">"sid"</span>: <span class="text-sky-300">matches</span>[1],
+                        <span class="text-green-300">"type"</span>: <span class="text-sky-300">matches</span>[3],
+                        <span class="text-green-300">"source_ip"</span>: <span class="text-sky-300">logLine</span>.match(<span class="text-green-300">/\{.*?\} (.*?) ->/</span>)[1] };
+                        <span class="text-purple-400">return</span> <span class="text-amber-300">msg</span>; }
+                        <span class="text-purple-400">return</span> <span class="text-amber-300">null</span>; }
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- Key Features Overview -->
+                <div class="card p-5 mt-4">
+                    <h3 class="text-xl font-semibold text-white mb-4 flex items-center">
+                        <i class="fas fa-key text-amber-400 mr-3"></i> Caractéristiques Principales
+                    </h3>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Feature 1 -->
+                        <div class="bg-slate-800 bg-opacity-60 p-4 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-search-plus text-lg text-red-400 mr-2"></i>
+                                <h4 class="text-lg font-medium text-white">Détection <span class="highlight">Contextuelle</span></h4>
+                            </div>
+                            <p class="text-sm text-gray-300">Analyse sémantique avancée des logs pour minimiser les faux positifs</p>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="bg-slate-800 bg-opacity-60 p-4 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-shipping-fast text-lg text-green-400 mr-2"></i>
+                                <h4 class="text-lg font-medium text-white">Traitement <span class="highlight">Asynchrone</span></h4>
+                            </div>
+                            <p class="text-sm text-gray-300">Exécution non-bloquante pour des alertes en temps réel sans latence</p>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="bg-slate-800 bg-opacity-60 p-4 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-clipboard-check text-lg text-sky-400 mr-2"></i>
+                                <h4 class="text-lg font-medium text-white">Validation des <span class="highlight">Données</span></h4>
+                            </div>
+                            <p class="text-sm text-gray-300">Filtrage et normalisation des données pour une intégration fiable</p>
+                        </div>
+
+                        <!-- Feature 4 -->
+                        <div class="bg-slate-800 bg-opacity-60 p-4 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-code-branch text-lg text-purple-400 mr-2"></i>
+                                <h4 class="text-lg font-medium text-white">Modularité <span class="highlight">Complète</span></h4>
+                            </div>
+                            <p class="text-sm text-gray-300">Fonctions indépendantes facilement modifiables et extensibles</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Number -->
+        <div class="absolute bottom-4 right-4 text-gray-400 text-sm">
+            14/31
+        </div>
+    </div>
+</body>
+
+</html>
+<script src='https://www.genspark.ai/slide-inner.js?_v=1'></script>
+<script id="html_badge_script1">
+    window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+        "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDn2SDnoOByLw1tgK1WmCQHOqRMpwDxZMW2vwmnh1rX1tVc9XVwA1wfdLupzEK9LLq%2BkTrJ0aXeurs3TBfkHpXMF1GPH7qTcABUNqODVM6R3p3%2FJvxGVd41ZA3CcFv3%2FtLKPnEnNw67zRCfLKDe2HVoWdGFlEE1A4Tv4EzjwWiPbQ6jmLtz2K1lu4S7NNohn3sdVKhbiq5pChowGMTP2nwBXk%2FfLBbnwXVWrdo1RUyXQwJq4rNgiazuGzqrEEvE5GcHjeRe28Sl%2Be6LjbhtrEjIVMqpVEXMMFcCSW3wX0lyZOWONspb5vHzuM5EuIdXn91p2grPiGfgw%2B6jYtNAgLHsxDdpH48Qs7gGDT2bMKbWtPCWimKJfWdIIicrp5Hn%2B3NioBiRJftNGO1YXbosUYYjt2ZrDToybyf4j4xL8xxdylSakuFrJ41F4CATpqvXBL0CFV%2BkEYBXW9hsl2fEnfu1n91UuugQuGoaWbZGbw7UbFRs8TU8kOpUfgvW%2FPjSjHXfSXxoukjxec%2FAhA7dfRyEIoSaibLS1ukcvqzIZkm4RvGfM5sSkpfJQ%2F8ut210MrhJiK77lPCxJ7m7Xwxqopynl%2FCaPdCHEVAe%2FsQWnMsU%2BJntuvR6CmKTxmPbroLgQZdTdHh9TGwbdvoILDW5kw3tyy%2B6n5sosPYwm7tlUlaPbA4FR%2B3sR%2FZaQP2P1XYc6R0XXEN2e9fq2lHqeNvYztvrE%3D";
+    window.__genspark_locale = "en-US";
+    window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDn2SDnoOByLw1tgK1WmCQHOqRMpwDxZMW2vwmnh1rX1tVc9XVwA1wfdLupzEK9LLq+kTrJ0aXeurs3TBfkHpXMF1GPH7qTcABUNqODVM6R3p3/JvxGVd41ZA3CcFv3/tLKPnEnNw67zRCfLKDe2HVoWdGFlEE1A4Tv4EzjwWiPbQ6jmLtz2K1lu4S7NNohn3sdVKhbiq5pChowGMTP2nwBXk/fLBbnwXVWrdo1RUyXQwJq4rNgiazuGzqrEEvE5GcHjeRe28Sl+e6LjbhtrEjIVMqpVEXMMFcCSW3wX0lyZOWONspb5vHzuM5EuIdXn91p2grPiGfgw+6jYtNAgLHsxDdpH48Qs7gGDT2bMKbWtPCWimKJfWdIIicrp5Hn+3NioBiRJftNGO1YXbosUYYjt2ZrDToybyf4j4xL8xxdylSakuFrJ41F4CATpqvXBL0CFV+kEYBXW9hsl2fEnfu1n91UuugQuGoaWbZGbw7UbFRs8TU8kOpUfgvW/PjSjHXfSXxoukjxec/AhA7dfRyEIoSaibLS1ukcvqzIZkm4RvGfM5sSkpfJQ/8ut210MrhJiK77lPCxJ7m7Xwxqopynl/CaPdCHEVAe/sQWnMsU+JntuvR6CmKTxmPbroLgQZdTdHh9TGwbdvoILDW5kw3tyy+6n5sosPYwm7tlUlaPbA4FR+3sR/ZaQP2P1XYc6R0XXEN2e9fq2lHqeNvYztvrE=";
+</script>
+
+<script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>

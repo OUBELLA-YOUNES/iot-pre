@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intégration d'InfluxDB - IoT Security System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hexagon {
+            position: absolute;
+            width: 200px;
+            height: 173px;
+            background: rgba(56, 189, 248, 0.05);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        .circuit-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0.3) 50%, rgba(56, 189, 248, 0.1) 100%);
+            z-index: 0;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .highlight {
+            display: inline-block;
+            position: relative;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            bottom: -2px;
+            left: 0;
+            background-color: #10B981;
+            border-radius: 2px;
+        }
+
+        .data-point {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #10B981;
+            position: absolute;
+        }
+
+        .database-row {
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .database-row:hover {
+            background-color: rgba(56, 189, 248, 0.1);
+        }
+
+        .time-column {
+            width: 200px;
+            text-align: left;
+            color: #94A3B8;
+        }
+
+        .message-column {
+            flex: 1;
+            text-align: left;
+            color: #E2E8F0;
+        }
+
+        .tag-column {
+            width: 120px;
+            text-align: center;
+        }
+
+        .graph-container {
+            position: relative;
+            height: 200px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .graph-line {
+            position: absolute;
+            height: 2px;
+            background: #10B981;
+            bottom: 50px;
+            width: 100%;
+            transform-origin: left center;
+        }
+
+        .pulse-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #10B981;
+            box-shadow: 0 0 10px #10B981;
+            animation: pulse 2s infinite;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .alert-tag {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #F87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .info-tag {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: #60A5FA;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .warning-tag {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: #FBBF24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            70% {
+                transform: scale(2);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide flex flex-col p-10 relative">
+        <!-- Background Elements -->
+        <div class="hexagon opacity-20" style="top: 120px; left: 180px; transform: rotate(20deg);"></div>
+        <div class="hexagon opacity-30" style="top: 350px; right: 200px; transform: rotate(-15deg);"></div>
+        <div class="hexagon opacity-15" style="bottom: 100px; left: 280px; transform: rotate(10deg);"></div>
+
+        <!-- Circuit Lines -->
+        <div class="circuit-line" style="width: 280px; top: 200px; left: 120px; transform: rotate(20deg);"></div>
+        <div class="circuit-line" style="width: 220px; top: 450px; right: 180px; transform: rotate(-12deg);"></div>
+        <div class="circuit-line" style="width: 300px; bottom: 140px; left: 220px; transform: rotate(-5deg);"></div>
+
+        <!-- Header -->
+        <div class="mb-8 z-10">
+            <h1 class="text-4xl font-bold text-white mb-2">Intégration d'InfluxDB</h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-green-500 to-green-300"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-12 gap-6 z-10">
+            <!-- Left Column - Database Info -->
+            <div class="col-span-5">
+                <!-- What is InfluxDB -->
+                <div class="card p-6 mb-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-900 bg-opacity-30 rounded-full w-12 h-12 flex items-center justify-center border-2 border-green-500 mr-4">
+                            <i class="fas fa-database text-2xl text-green-400"></i>
+                        </div>
+                        <h2 class="text-2xl font-semibold text-white">
+                            Base de Données <span class="highlight">Temporelle</span>
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 mt-6">
+                        <div class="bg-slate-800 bg-opacity-60 p-4 rounded-lg flex items-start">
+                            <i class="fas fa-chart-line text-lg text-green-400 mr-3 mt-1"></i>
+                            <div>
+                                <h4 class="text-lg font-medium text-white">Haute Performance</h4>
+                                <p class="text-sm text-gray-300">Optimisé pour les données de séries chronologiques</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 bg-opacity-60 p-4 rounded-lg flex items-start">
+                            <i class="fas fa-search text-lg text-green-400 mr-3 mt-1"></i>
+                            <div>
+                                <h4 class="text-lg font-medium text-white">Requêtes Avancées</h4>
+                                <p class="text-sm text-gray-300">Langage de requête InfluxQL pour l'analyse temporelle</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 bg-opacity-60 p-4 rounded-lg flex items-start">
+                            <i class="fas fa-tag text-lg text-green-400 mr-3 mt-1"></i>
+                            <div>
+                                <h4 class="text-lg font-medium text-white">Structure Flexible</h4>
+                                <p class="text-sm text-gray-300">Points temporels avec tags et champs personnalisables</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization -->
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold text-white mb-4 flex items-center">
+                        <i class="fas fa-chart-area text-green-400 mr-3"></i> Visualisation via Grafana
+                    </h3>
+
+                    <div class="relative bg-slate-800 bg-opacity-60 p-4 rounded-lg" style="height: 160px;">
+                        <div class="absolute left-0 bottom-0 w-full h-px bg-gray-700"></div>
+                        <div class="absolute left-0 top-0 h-full w-px bg-gray-700"></div>
+
+                        <!-- Graph Lines -->
+                        <div class="graph-line" style="animation: wave 5s infinite ease-in-out; height: 2px;"></div>
+                        <div class="pulse-dot" style="bottom: 50px; left: 20%;"></div>
+                        <div class="pulse-dot" style="bottom: 90px; left: 35%;"></div>
+                        <div class="pulse-dot" style="bottom: 30px; left: 50%;"></div>
+                        <div class="pulse-dot" style="bottom: 110px; left: 65%; animation-delay: 0.5s;"></div>
+                        <div class="pulse-dot" style="bottom: 50px; left: 80%; animation-delay: 1s;"></div>
+
+                        <!-- Graph Label -->
+                        <div class="absolute top-4 left-4 bg-gray-800 bg-opacity-70 px-3 py-1 rounded text-sm text-green-400 font-medium">
+                            <i class="fas fa-exclamation-triangle mr-1"></i> Alertes d'intrusion
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-gray-300 mt-4">
+                        <i class="fas fa-info-circle text-blue-400 mr-1"></i> Tableaux de bord personnalisables pour analyse des tendances d'intrusion, alertes visuelles et rapports de sécurité.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Column - Data Structure -->
+            <div class="col-span-7">
+                <!-- Data Flow Diagram -->
+                <div class="card p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-white mb-4 flex items-center">
+                        <i class="fas fa-exchange-alt text-green-400 mr-3"></i> Flux de Données
+                    </h3>
+
+                    <div class="flex items-center justify-around mt-2 mb-6">
+                        <!-- Suricata -->
+                        <div class="text-center">
+                            <div class="bg-red-900 bg-opacity-30 rounded-full w-16 h-16 flex items-center justify-center border-2 border-red-500 mx-auto">
+                                <i class="fas fa-shield-alt text-2xl text-red-400"></i>
+                            </div>
+                            <p class="text-sm font-medium text-white mt-2">Suricata</p>
+                            <p class="text-xs text-gray-400">Génération d'alertes</p>
+                        </div>
+
+                        <!-- Arrow -->
+                        <div>
+                            <i class="fas fa-long-arrow-alt-right text-gray-400 text-2xl"></i>
+                        </div>
+
+                        <!-- Node-RED -->
+                        <div class="text-center">
+                            <div class="bg-blue-900 bg-opacity-30 rounded-full w-16 h-16 flex items-center justify-center border-2 border-blue-500 mx-auto">
+                                <i class="fas fa-code-branch text-2xl text-blue-400"></i>
+                            </div>
+                            <p class="text-sm font-medium text-white mt-2">Node-RED</p>
+                            <p class="text-xs text-gray-400">Traitement des logs</p>
+                        </div>
+
+                        <!-- Arrow -->
+                        <div>
+                            <i class="fas fa-long-arrow-alt-right text-gray-400 text-2xl"></i>
+                        </div>
+
+                        <!-- InfluxDB -->
+                        <div class="text-center">
+                            <div class="bg-green-900 bg-opacity-30 rounded-full w-16 h-16 flex items-center justify-center border-2 border-green-500 mx-auto">
+                                <i class="fas fa-database text-2xl text-green-400"></i>
+                            </div>
+                            <p class="text-sm font-medium text-white mt-2">InfluxDB</p>
+                            <p class="text-xs text-gray-400">Stockage des données</p>
+                        </div>
+
+                        <!-- Arrow -->
+                        <div>
+                            <i class="fas fa-long-arrow-alt-right text-gray-400 text-2xl"></i>
+                        </div>
+
+                        <!-- Grafana -->
+                        <div class="text-center">
+                            <div class="bg-purple-900 bg-opacity-30 rounded-full w-16 h-16 flex items-center justify-center border-2 border-purple-500 mx-auto">
+                                <i class="fas fa-chart-bar text-2xl text-purple-400"></i>
+                            </div>
+                            <p class="text-sm font-medium text-white mt-2">Grafana</p>
+                            <p class="text-xs text-gray-400">Visualisation</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Database Schema -->
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold text-white mb-4 flex items-center">
+                        <i class="fas fa-table text-green-400 mr-3"></i> Structure de Données
+                    </h3>
+
+                    <!-- Table Header -->
+                    <div class="flex items-center py-3 border-b-2 border-slate-600">
+                        <div class="time-column font-medium text-green-300">Timestamp</div>
+                        <div class="message-column font-medium text-green-300">Message</div>
+                        <div class="tag-column font-medium text-green-300">Type</div>
+                    </div>
+
+                    <!-- Table Rows -->
+                    <div class="max-h-48 overflow-y-auto">
+                        <div class="flex items-center py-3 database-row">
+                            <div class="time-column text-sm">2023-06-24 10:15:42</div>
+                            <div class="message-column text-sm">MQTT temperature message detected</div>
+                            <div class="tag-column">
+                                <span class="tag info-tag">info</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center py-3 database-row">
+                            <div class="time-column text-sm">2023-06-24 10:15:48</div>
+                            <div class="message-column text-sm">MQTT doorLock message</div>
+                            <div class="tag-column">
+                                <span class="tag info-tag">info</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center py-3 database-row bg-red-900 bg-opacity-20">
+                            <div class="time-column text-sm">2023-06-24 10:16:02</div>
+                            <div class="message-column text-sm">Suspicious MQTT command</div>
+                            <div class="tag-column">
+                                <span class="tag alert-tag">alerte</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center py-3 database-row">
+                            <div class="time-column text-sm">2023-06-24 10:16:12</div>
+                            <div class="message-column text-sm">MQTT temperature message detected</div>
+                            <div class="tag-column">
+                                <span class="tag info-tag">info</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center py-3 database-row bg-yellow-900 bg-opacity-20">
+                            <div class="time-column text-sm">2023-06-24 10:16:30</div>
+                            <div class="message-column text-sm">Multiple connection attempts</div>
+                            <div class="tag-column">
+                                <span class="tag warning-tag">avertissement</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center py-3 database-row bg-red-900 bg-opacity-20">
+                            <div class="time-column text-sm">2023-06-24 10:17:15</div>
+                            <div class="message-column text-sm">Brute force attack detected</div>
+                            <div class="tag-column">
+                                <span class="tag alert-tag">alerte</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Database Features -->
+                    <div class="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-slate-700">
+                        <div class="text-center">
+                            <div class="text-green-400 mb-1">
+                                <i class="fas fa-history text-lg"></i>
+                            </div>
+                            <h5 class="text-sm text-white font-medium">Rétention Configurable</h5>
+                            <p class="text-xs text-gray-400">Jusqu'à 50M points / seconde</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-green-400 mb-1">
+                                <i class="fas fa-layer-group text-lg"></i>
+                            </div>
+                            <h5 class="text-sm text-white font-medium">Downsampling</h5>
+                            <p class="text-xs text-gray-400">Agrégation de données historiques</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-green-400 mb-1">
+                                <i class="fas fa-compress-arrows-alt text-lg"></i>
+                            </div>
+                            <h5 class="text-sm text-white font-medium">Compression</h5>
+                            <p class="text-xs text-gray-400">~10:1 ratio pour optimisation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Number -->
+        <div class="absolute bottom-4 right-4 text-gray-400 text-sm">
+            16/31
+        </div>
+    </div>
+</body>
+
+</html>
+<script src='https://www.genspark.ai/slide-inner.js?_v=1'></script>
+<script id="html_badge_script1">
+    window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+        "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDnFU7FSlTPnHh3HqrtXa%2FzyK6aqwTbktuJ5Ut9XJZLY4USpxuYutjEx%2BCfmlQn0SSZTUvp8YlOZVgXutjdoeMqFVOhnYf1QGOy2hnue%2FhFS0Psq4bCvaaaq8v2Ntsc9KnZQS5n45FUWxNvwTZK6daD8tDmWmBVsgIcTUahy4aOCS9BYVYHVeL2f8o0wv3Mona53rYReZ1KVRapro8cAvsW2UI4TS0151Ivr1LoPGtULUA1sFVQsZrDL%2BXyeQpieKJhXvUVvYLUFibC%2FS71ry1VzDEO947lKH1IzCBHfqaKXzFLZnryr7%2B0TflRjH3hCXDjc07VIE4rf2WujMj2NQypgYPeP2VT%2Bntl9kjnYkIpvo%2BATKsIhNdvI5HMIKQcwDeR6vI6wqpqJ2ptm4Dzcz5SRf7yhhtNqgc7uMFmPIZbtMd2MALMiKLLCiVGnbTvHP8mEEaFcRTDVc4auh2xxu9n9g%2FGRuiycOQqPRQEXyy8M5h6sVCwFCbdheAshVlQl8va003kDd3NNUP8eVo0QBUsKotPeUTNb0MI6tfira3tjpApGHRWFeKjBuYWkntCMrY%2FDqZPCMtYtv8RGkMdB7NPbjqtsCL23tEUCf9jqCwkhGU3HVzoZeOTTuIWTbv2K7C6HszLhPHiaTzH4jS19Z5ecLOcyVwiJqlPpmHwcSU17LUUIWZ%2BhEVu0PNws7Us6VHNHF17F23Nx%2Fd7ydjsNk%2Fgo%3D";
+    window.__genspark_locale = "en-US";
+    window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDnFU7FSlTPnHh3HqrtXa/zyK6aqwTbktuJ5Ut9XJZLY4USpxuYutjEx+CfmlQn0SSZTUvp8YlOZVgXutjdoeMqFVOhnYf1QGOy2hnue/hFS0Psq4bCvaaaq8v2Ntsc9KnZQS5n45FUWxNvwTZK6daD8tDmWmBVsgIcTUahy4aOCS9BYVYHVeL2f8o0wv3Mona53rYReZ1KVRapro8cAvsW2UI4TS0151Ivr1LoPGtULUA1sFVQsZrDL+XyeQpieKJhXvUVvYLUFibC/S71ry1VzDEO947lKH1IzCBHfqaKXzFLZnryr7+0TflRjH3hCXDjc07VIE4rf2WujMj2NQypgYPeP2VT+ntl9kjnYkIpvo+ATKsIhNdvI5HMIKQcwDeR6vI6wqpqJ2ptm4Dzcz5SRf7yhhtNqgc7uMFmPIZbtMd2MALMiKLLCiVGnbTvHP8mEEaFcRTDVc4auh2xxu9n9g/GRuiycOQqPRQEXyy8M5h6sVCwFCbdheAshVlQl8va003kDd3NNUP8eVo0QBUsKotPeUTNb0MI6tfira3tjpApGHRWFeKjBuYWkntCMrY/DqZPCMtYtv8RGkMdB7NPbjqtsCL23tEUCf9jqCwkhGU3HVzoZeOTTuIWTbv2K7C6HszLhPHiaTzH4jS19Z5ecLOcyVwiJqlPpmHwcSU17LUUIWZ+hEVu0PNws7Us6VHNHF17F23Nx/d7ydjsNk/go=";
+</script>
+
+<script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>
