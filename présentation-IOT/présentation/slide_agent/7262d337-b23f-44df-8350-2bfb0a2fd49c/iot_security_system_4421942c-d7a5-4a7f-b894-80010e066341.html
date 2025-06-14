@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Énoncé du problème - IoT Security System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hexagon {
+            position: absolute;
+            width: 200px;
+            height: 173px;
+            background: rgba(239, 68, 68, 0.05);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        .circuit-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.3) 50%, rgba(239, 68, 68, 0.1) 100%);
+            z-index: 0;
+        }
+
+        .circuit-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(239, 68, 68, 0.4);
+            z-index: 1;
+        }
+
+        .problem-card {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 10px;
+            border-left: 4px solid #ef4444;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.4);
+        }
+
+        .icon-container {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(185, 28, 28, 0.2);
+            border: 2px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide flex flex-col p-10 relative">
+        <!-- Background Elements -->
+        <div class="hexagon opacity-20" style="top: 50px; left: 150px; transform: rotate(15deg);"></div>
+        <div class="hexagon opacity-30" style="top: 200px; right: 180px; transform: rotate(-15deg);"></div>
+        <div class="hexagon opacity-15" style="bottom: 80px; left: 250px; transform: rotate(10deg);"></div>
+        <div class="hexagon opacity-25" style="bottom: 120px; right: 220px; transform: rotate(-20deg);"></div>
+
+        <!-- Circuit Lines -->
+        <div class="circuit-line" style="width: 350px; top: 150px; left: 50px; transform: rotate(15deg);"></div>
+        <div class="circuit-line" style="width: 450px; top: 320px; right: 60px; transform: rotate(-10deg);"></div>
+        <div class="circuit-line" style="width: 280px; bottom: 180px; left: 120px; transform: rotate(-25deg);"></div>
+
+        <!-- Header -->
+        <div class="mb-8 z-10">
+            <h1 class="text-4xl font-bold text-white mb-2">Énoncé du Problème</h1>
+            <div class="w-20 h-1 bg-gradient-to-r from-red-500 to-red-300"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 gap-6 z-10">
+            <!-- Problem 1 -->
+            <div class="problem-card p-6 flex items-start">
+                <div class="icon-container pulse-animation mr-6">
+                    <i class="fas fa-bug text-4xl text-red-400"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-semibold text-red-300 mb-2">Failles de Sécurité dans les Configurations IoT Traditionnelles</h2>
+                    <ul class="text-gray-300 space-y-1">
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Authentification faible ou inexistante entre les dispositifs</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Communications non chiffrées exposant les données sensibles</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Mise à jour difficile et firmware souvent obsolète</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Problem 2 -->
+            <div class="problem-card p-6 flex items-start">
+                <div class="icon-container pulse-animation mr-6">
+                    <i class="fas fa-search-minus text-4xl text-red-400"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-semibold text-red-300 mb-2">Absence de Détection d'Intrusion Native dans MQTT</h2>
+                    <ul class="text-gray-300 space-y-1">
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Protocole MQTT conçu pour la performance, pas pour la sécurité</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Aucune protection contre les attaques par force brute</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Vulnérable aux injections malveillantes de données</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Problem 3 -->
+            <div class="problem-card p-6 flex items-start">
+                <div class="icon-container pulse-animation mr-6">
+                    <i class="fas fa-bell-slash text-4xl text-red-400"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-semibold text-red-300 mb-2">Manque d'Alertes Automatisées dans les Systèmes Existants</h2>
+                    <ul class="text-gray-300 space-y-1">
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Détection tardive des intrusions, souvent après compromission</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Absence de notification en temps réel à l'utilisateur</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Manque d'intégration entre détection et systèmes d'alerte</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Number -->
+        <div class="absolute bottom-4 right-4 text-gray-400 text-sm">
+            3/31
+        </div>
+    </div>
+</body>
+
+</html>
+<script src='https://www.genspark.ai/slide-inner.js?_v=1'></script>
+<script id="html_badge_script1">
+    window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+        "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDnS43Nuf9dy1CdUwRB2JcgFPbdCSlc2qHiO6F%2FeAnLTmuyErG2%2B%2FeZGV3iQLSQwsWTsd7FPbjxXVWLDCi%2FClKylVHTGz8MSMn4rD92SeKIp52Vp4JXsZBS5FWMr60SuX56O12jl08zb%2BCkOCMVSEs9kgGtsT1ucWIFPSr4Clk6J1dpig9xJbyOc%2BHcBEJPxAqG%2BVd3MTtqIwui9TUBYzzCh%2BVzUutMVVWnD50xSS6h4TCTa8oCJFHspnWBFwWJfznCujQc9rbKo7rI%2BNpCvHksc3pgGfxRFNCtrcqehzeurAP27Sm8laolGKl%2FRPqL8OEpooFwvLtHsMGr3bRYcgkrGZyzMIZ0yrfw3GICo3KfSX9XdWkjyLu1I6BfO6BsBhgwz2vU6Vnf1qQ%2F8pC8KqEBj9sdRq80zFzXxDUMA2Dy2xDm9voC5YSe%2FQE%2FywNZHgYC4ZhC5umQznpcm%2BwSHmidCZvbxYB8kYQ4RGmzCZxpqXpmGwUSTdlAhfHNU5R9a2s3g1DMSDk7MiZg%2BoU2MNBmmv%2B7Mxvp5qRPlze9t7KxZDY2ty0X6Z%2Bmb9YfgBku8ZAV4dJpyNm9D0ygofod3Cgsa2Dc8NHD1i7aK8k%2BiwuvV9c2My9GbUj%2BtsTXJDSx%2BKybruoHfZydlnT7OhEgcH71%2FlOLJyTreK0RX7ujCSqefXrAdWhpJQejScEOKOvLsjWYce26NU2GSh9adZj%2BjOorg%3D";
+    window.__genspark_locale = "en-US";
+    window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDnS43Nuf9dy1CdUwRB2JcgFPbdCSlc2qHiO6F/eAnLTmuyErG2+/eZGV3iQLSQwsWTsd7FPbjxXVWLDCi/ClKylVHTGz8MSMn4rD92SeKIp52Vp4JXsZBS5FWMr60SuX56O12jl08zb+CkOCMVSEs9kgGtsT1ucWIFPSr4Clk6J1dpig9xJbyOc+HcBEJPxAqG+Vd3MTtqIwui9TUBYzzCh+VzUutMVVWnD50xSS6h4TCTa8oCJFHspnWBFwWJfznCujQc9rbKo7rI+NpCvHksc3pgGfxRFNCtrcqehzeurAP27Sm8laolGKl/RPqL8OEpooFwvLtHsMGr3bRYcgkrGZyzMIZ0yrfw3GICo3KfSX9XdWkjyLu1I6BfO6BsBhgwz2vU6Vnf1qQ/8pC8KqEBj9sdRq80zFzXxDUMA2Dy2xDm9voC5YSe/QE/ywNZHgYC4ZhC5umQznpcm+wSHmidCZvbxYB8kYQ4RGmzCZxpqXpmGwUSTdlAhfHNU5R9a2s3g1DMSDk7MiZg+oU2MNBmmv+7Mxvp5qRPlze9t7KxZDY2ty0X6Z+mb9YfgBku8ZAV4dJpyNm9D0ygofod3Cgsa2Dc8NHD1i7aK8k+iwuvV9c2My9GbUj+tsTXJDSx+KybruoHfZydlnT7OhEgcH71/lOLJyTreK0RX7ujCSqefXrAdWhpJQejScEOKOvLsjWYce26NU2GSh9adZj+jOorg=";
+</script>
+
+<script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>

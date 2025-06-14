@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Suricata - IoT Security System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hexagon {
+            position: absolute;
+            width: 200px;
+            height: 173px;
+            background: rgba(56, 189, 248, 0.05);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        .circuit-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0.3) 50%, rgba(56, 189, 248, 0.1) 100%);
+            z-index: 0;
+        }
+
+        .circuit-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(56, 189, 248, 0.4);
+            z-index: 1;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), 0 0 10px rgba(56, 189, 248, 0.4);
+            border-color: rgba(56, 189, 248, 0.6);
+        }
+
+        .pulse-blue {
+            animation: pulse-blue 2s infinite;
+        }
+
+        @keyframes pulse-blue {
+            0% {
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(56, 189, 248, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+            }
+        }
+
+        .packet {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #10B981;
+            border-radius: 50%;
+            animation: move-packet 3s linear infinite;
+        }
+
+        .packet.malicious {
+            background-color: #EF4444;
+            animation: move-packet 4s linear infinite;
+        }
+
+        @keyframes move-packet {
+            0% {
+                transform: translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(380px);
+                opacity: 0;
+            }
+        }
+
+        .alert-animation {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            opacity: 0;
+            color: #EF4444;
+            animation: alert 5s ease-in-out infinite;
+        }
+
+        @keyframes alert {
+            0%,
+            100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .network-line {
+            position: absolute;
+            height: 2px;
+            background-color: rgba(148, 163, 184, 0.4);
+            z-index: 0;
+        }
+
+        .detection-animation {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: rgba(56, 189, 248, 0.2);
+            border: 2px solid rgba(56, 189, 248, 0.6);
+            border-radius: 50%;
+            animation: detection-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes detection-pulse {
+            0%,
+            100% {
+                transform: scale(0.8);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(56, 189, 248, 0.2);
+            border: 2px solid rgba(56, 189, 248, 0.4);
+            color: rgba(56, 189, 248, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            background: rgba(56, 189, 248, 0.3);
+            border-color: rgba(56, 189, 248, 0.8);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide flex flex-col p-10 relative">
+        <!-- Background Elements -->
+        <div class="hexagon opacity-20" style="top: 120px; left: 250px; transform: rotate(15deg);"></div>
+        <div class="hexagon opacity-30" style="top: 280px; right: 220px; transform: rotate(-10deg);"></div>
+        <div class="hexagon opacity-15" style="bottom: 120px; left: 200px; transform: rotate(5deg);"></div>
+
+        <!-- Circuit Lines -->
+        <div class="circuit-line" style="width: 350px; top: 180px; left: 100px; transform: rotate(15deg);"></div>
+        <div class="circuit-line" style="width: 280px; top: 400px; right: 150px; transform: rotate(-8deg);"></div>
+        <div class="circuit-line" style="width: 320px; bottom: 150px; left: 80px; transform: rotate(-12deg);"></div>
+
+        <!-- Header -->
+        <div class="mb-6 z-10">
+            <h1 class="text-4xl font-bold text-white mb-2">Introduction à Suricata</h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-sky-500 to-sky-300"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex gap-6 z-10">
+            <!-- Left Section: What is Suricata -->
+            <div class="w-1/2">
+                <div class="card p-6 h-full flex flex-col">
+                    <h2 class="text-3xl font-semibold text-sky-400 mb-6">Network Intrusion Detection System (NIDS)</h2>
+
+                    <div class="flex-grow flex flex-col justify-center">
+                        <div class="relative h-72 mx-auto w-full">
+                            <!-- Network Diagram -->
+                            <div class="absolute top-1/4 left-0 right-0 mx-auto w-full flex justify-center items-center">
+                                <!-- Network Line -->
+                                <div class="network-line w-full"></div>
+
+                                <!-- Network Devices -->
+                                <div class="absolute -left-1 -translate-y-1/2 text-slate-400">
+                                    <i class="fas fa-laptop text-3xl"></i>
+                                </div>
+                                <div class="absolute left-1/4 -translate-y-1/2 text-slate-400">
+                                    <i class="fas fa-mobile-alt text-3xl"></i>
+                                </div>
+                                <div class="absolute right-1/4 -translate-y-1/2 text-slate-400">
+                                    <i class="fas fa-desktop text-3xl"></i>
+                                </div>
+                                <div class="absolute -right-1 -translate-y-1/2 text-slate-400">
+                                    <i class="fas fa-thermometer-half text-3xl"></i>
+                                </div>
+
+                                <!-- Normal Packets -->
+                                <div class="packet" style="top: -4px; left: 0px; animation-delay: 0s;"></div>
+                                <div class="packet" style="top: -4px; left: 0px; animation-delay: 1s;"></div>
+                                <div class="packet" style="top: -4px; left: 0px; animation-delay: 2s;"></div>
+
+                                <!-- Malicious Packets -->
+                                <div class="packet malicious" style="top: -4px; left: 100px; animation-delay: 2.5s;"></div>
+                                <div class="packet malicious" style="top: -4px; left: 200px; animation-delay: 1.5s;"></div>
+                            </div>
+
+                            <!-- Suricata -->
+                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 mt-12 flex flex-col items-center">
+                                <div class="w-24 h-24 bg-slate-800 rounded-lg flex items-center justify-center mb-3 pulse-blue">
+                                    <i class="fas fa-shield-alt text-sky-400 text-5xl"></i>
+                                </div>
+                                <span class="text-sky-300 text-xl font-bold">SURICATA</span>
+
+                                <!-- Detection Circles -->
+                                <div class="detection-animation" style="top: -60px; left: 50%; transform: translateX(-50%);"></div>
+                            </div>
+
+                            <!-- Alert Icons -->
+                            <div class="alert-animation" style="top: 50px; right: 80px; animation-delay: 1.5s;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="alert-animation" style="top: 30px; right: 160px; animation-delay: 3.5s;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 bg-opacity-50 p-4 rounded-lg mt-8 border-l-4 border-sky-500">
+                            <p class="text-white text-lg">Suricata surveille passivement le trafic réseau, identifie les menaces et génère des alertes sans bloquer le trafic.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Section: Features -->
+            <div class="w-1/2 flex flex-col gap-4">
+                <h2 class="text-3xl font-semibold text-white mb-2">Capacités Clés</h2>
+
+                <!-- Feature 1: Monitors Packets -->
+                <div class="card p-5 feature-card flex items-center">
+                    <div class="feature-icon mr-5">
+                        <i class="fas fa-search text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-white mb-1">Surveillance de Paquets</h3>
+                        <p class="text-gray-300">Inspection profonde des paquets à haut débit</p>
+                        <p class="text-gray-300">Analyse en temps réel du trafic réseau</p>
+                        <p class="text-gray-300">Décodage de protocoles multiples</p>
+                    </div>
+                </div>
+
+                <!-- Feature 2: Detects Anomalies -->
+                <div class="card p-5 feature-card flex items-center">
+                    <div class="feature-icon mr-5">
+                        <i class="fas fa-exclamation-circle text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-white mb-1">Détection d'Anomalies</h3>
+                        <p class="text-gray-300">Reconnaissance de schémas suspects</p>
+                        <p class="text-gray-300">Identification du trafic malveillant</p>
+                        <p class="text-gray-300">Détection de comportements anormaux</p>
+                    </div>
+                </div>
+
+                <!-- Feature 3: Signature-based -->
+                <div class="card p-5 feature-card flex items-center">
+                    <div class="feature-icon mr-5">
+                        <i class="fas fa-fingerprint text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-white mb-1">Basé sur Signatures</h3>
+                        <p class="text-gray-300">Règles hautement personnalisables</p>
+                        <p class="text-gray-300">Base de données de signatures à jour</p>
+                        <p class="text-gray-300">Faible taux de faux positifs</p>
+                    </div>
+                </div>
+
+                <!-- Feature 4: Protocol-aware -->
+                <div class="card p-5 feature-card flex items-center">
+                    <div class="feature-icon mr-5">
+                        <i class="fas fa-exchange-alt text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-white mb-1">Conscience des Protocoles</h3>
+                        <p class="text-gray-300">Support natif du protocole MQTT</p>
+                        <p class="text-gray-300">Comprend le contexte des communications</p>
+                        <p class="text-gray-300">Analyse sémantique avancée</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Number -->
+        <div class="absolute bottom-4 right-4 text-gray-400 text-sm">
+            10/31
+        </div>
+    </div>
+</body>
+
+</html>
+<script src='https://www.genspark.ai/slide-inner.js?_v=1'></script>
+<script id="html_badge_script1">
+    window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+        "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDi4%2FGTv3R2x2koCydyBpcd6Z3ozeIX2fLNzzAmd4a65qy9E5pWM3qEXsAsBVOaVp6htCcsA3awjlqRj%2FpEopUq%2Bu5ZdMGG7EORdnwbChAQoW0DLwuqyzvqu5Htvsg8Dnsi%2FZXqgwCsFyBNsxDuRgsQDvWlVnXb4Yqgn0NU7z3TdF4AVJma3iEcp3kWzxfcjtPubwz5sX495XmrJF0kHQ5uS1VG27UolZY5a%2Fo4Q1Yr3E6TR%2FodUMtn8xEkYdEro8QzTwbIyJcJXxwj282%2BII8TTYctxLBRfAgH3v7X5oUlra8FJgf%2Fudl58y8B7Z1MOglikHwuOt%2BO9OWHOZFCeuLon8sQ%2F86%2FT%2Fup1OtG2h7s9OCNDYcR2yZcIThCpUf9F8GaqxHVfYM2zWph%2BnGmhquSOGZXBDaMetxjjZgdaeSThdkTNjZVipg%2FTsGDdjb7UN3KhlZnZnLAQj4MThtPyTkzOE1a1Em%2FW%2Bz2d4CDQLQfNYt%2BkRqJrrqoxnCTfkHxECNt9soYraXGEr2EqyxnY12A9HYg%2B4FuObvbdzr3k8wfOv7gG9lsX3TyuEMbf9lEsDI5N8bCpu3uC%2BYSAEhHWrZm%2FaGqtxw6Y8uJzkIZcEupIRaBTqDjXJR4qHjBQz%2B6j7NiIquedu1WCJ23pzes1Z8YlfNoW77r2b68A9guTbfi5d80w8Wh3ewjDh1Qum5zQJD36v0ixN5edpWEMxWrILnGk%3D";
+    window.__genspark_locale = "en-US";
+    window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDi4/GTv3R2x2koCydyBpcd6Z3ozeIX2fLNzzAmd4a65qy9E5pWM3qEXsAsBVOaVp6htCcsA3awjlqRj/pEopUq+u5ZdMGG7EORdnwbChAQoW0DLwuqyzvqu5Htvsg8Dnsi/ZXqgwCsFyBNsxDuRgsQDvWlVnXb4Yqgn0NU7z3TdF4AVJma3iEcp3kWzxfcjtPubwz5sX495XmrJF0kHQ5uS1VG27UolZY5a/o4Q1Yr3E6TR/odUMtn8xEkYdEro8QzTwbIyJcJXxwj282+II8TTYctxLBRfAgH3v7X5oUlra8FJgf/udl58y8B7Z1MOglikHwuOt+O9OWHOZFCeuLon8sQ/86/T/up1OtG2h7s9OCNDYcR2yZcIThCpUf9F8GaqxHVfYM2zWph+nGmhquSOGZXBDaMetxjjZgdaeSThdkTNjZVipg/TsGDdjb7UN3KhlZnZnLAQj4MThtPyTkzOE1a1Em/W+z2d4CDQLQfNYt+kRqJrrqoxnCTfkHxECNt9soYraXGEr2EqyxnY12A9HYg+4FuObvbdzr3k8wfOv7gG9lsX3TyuEMbf9lEsDI5N8bCpu3uC+YSAEhHWrZm/aGqtxw6Y8uJzkIZcEupIRaBTqDjXJR4qHjBQz+6j7NiIquedu1WCJ23pzes1Z8YlfNoW77r2b68A9guTbfi5d80w8Wh3ewjDh1Qum5zQJD36v0ixN5edpWEMxWrILnGk=";
+</script>
+
+<script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>

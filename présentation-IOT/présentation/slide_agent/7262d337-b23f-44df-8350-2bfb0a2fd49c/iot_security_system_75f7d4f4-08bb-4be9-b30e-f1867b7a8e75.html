@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation Matérielle - IoT Security System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hexagon {
+            position: absolute;
+            width: 200px;
+            height: 173px;
+            background: rgba(56, 189, 248, 0.05);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        .circuit-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0.3) 50%, rgba(56, 189, 248, 0.1) 100%);
+            z-index: 0;
+        }
+
+        .circuit-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(56, 189, 248, 0.4);
+            z-index: 1;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), 0 0 10px rgba(56, 189, 248, 0.4);
+            border-color: rgba(56, 189, 248, 0.6);
+        }
+
+        .esp32-simulation {
+            position: relative;
+            height: 260px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: linear-gradient(180deg, rgba(17, 24, 39, 0.9) 0%, rgba(17, 24, 39, 0.7) 100%);
+        }
+
+        .esp32-icon {
+            width: 180px;
+            height: 180px;
+            background-color: rgba(30, 41, 59, 0.9);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+        }
+
+        .esp32-chip {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            border-radius: 8px;
+            position: relative;
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+
+        .pins {
+            position: absolute;
+            height: 4px;
+            background-color: #94a3b8;
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        .pins.top {
+            top: -2px;
+        }
+
+        .pins.bottom {
+            bottom: -2px;
+        }
+
+        .pin {
+            width: 2px;
+            height: 6px;
+            background-color: #cbd5e1;
+            margin: 0 1px;
+        }
+
+        .chip-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(56, 189, 248, 0.9);
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(56, 189, 248, 0.5);
+        }
+
+        .esp32-label {
+            position: absolute;
+            bottom: -35px;
+            font-size: 16px;
+            font-weight: bold;
+            color: rgba(203, 213, 225, 0.9);
+        }
+
+        .mqtt-topic {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 8px;
+            border-left: 3px solid;
+            transition: all 0.3s ease;
+        }
+
+        .mqtt-topic:hover {
+            transform: translateX(5px);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .mqtt-topic.temperature {
+            border-left-color: #f97316;
+        }
+
+        .mqtt-topic.motion {
+            border-left-color: #3b82f6;
+        }
+
+        .mqtt-topic.doorLock {
+            border-left-color: #10b981;
+        }
+
+        .mqtt-topic.alert {
+            border-left-color: #ef4444;
+        }
+
+        .topic-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        .topic-icon.temperature {
+            background: rgba(249, 115, 22, 0.2);
+            color: #f97316;
+        }
+
+        .topic-icon.motion {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .topic-icon.doorLock {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .topic-icon.alert {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .signal-line {
+            position: absolute;
+            width: 120px;
+            height: 2px;
+            background: rgba(56, 189, 248, 0.4);
+        }
+
+        .signal-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(56, 189, 248, 0.8);
+            animation: movingDot 3s infinite linear;
+        }
+
+        @keyframes movingDot {
+            0% {
+                left: 0;
+            }
+            100% {
+                left: calc(100% - 8px);
+            }
+        }
+
+        .pulse-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(56, 189, 248, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.7;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.3;
+            }
+            100% {
+                transform: scale(0.95);
+                opacity: 0.7;
+            }
+        }
+
+        .wokwi-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 102, 0, 0.2);
+            border: 1px solid rgba(255, 102, 0, 0.5);
+            border-radius: 6px;
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #ff6600;
+        }
+
+        .code-snippet {
+            font-family: monospace;
+            font-size: 14px;
+            color: #e2e8f0;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide flex flex-col p-10 relative">
+        <!-- Background Elements -->
+        <div class="hexagon opacity-20" style="top: 80px; left: 220px; transform: rotate(15deg);"></div>
+        <div class="hexagon opacity-30" style="top: 250px; right: 180px; transform: rotate(-10deg);"></div>
+        <div class="hexagon opacity-15" style="bottom: 100px; left: 180px; transform: rotate(5deg);"></div>
+
+        <!-- Circuit Lines -->
+        <div class="circuit-line" style="width: 350px; top: 180px; left: 100px; transform: rotate(15deg);"></div>
+        <div class="circuit-line" style="width: 280px; top: 350px; right: 150px; transform: rotate(-8deg);"></div>
+        <div class="circuit-line" style="width: 320px; bottom: 150px; left: 80px; transform: rotate(-12deg);"></div>
+
+        <!-- Header -->
+        <div class="mb-5 z-10">
+            <h1 class="text-4xl font-bold text-white mb-2">Simulation Matérielle</h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-sky-500 to-sky-300"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex flex-row gap-10 z-10">
+            <!-- Left Column - ESP32 Wokwi Simulation -->
+            <div class="w-1/2">
+                <h2 class="text-2xl font-semibold text-sky-300 mb-3">ESP32 sur Wokwi</h2>
+                <div class="card p-4 h-auto">
+                    <div class="esp32-simulation">
+                        <!-- Wokwi Badge -->
+                        <div class="wokwi-badge">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
+                                <path d="M12 6L5 10.5V17.5L12 22L19 17.5V10.5L12 6Z" stroke="#ff6600" stroke-width="2" />
+                                <circle cx="12" cy="14" r="3" stroke="#ff6600" stroke-width="2" />
+                            </svg> Wokwi
+                        </div>
+
+                        <!-- ESP32 Icon -->
+                        <div class="esp32-icon">
+                            <div class="esp32-chip">
+                                <div class="pins top">
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                </div>
+                                <div class="chip-label">ESP32</div>
+                                <div class="pins bottom">
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                    <div class="pin"></div>
+                                </div>
+                            </div>
+                            <div class="esp32-label">Microcontrôleur IoT</div>
+                        </div>
+
+                        <!-- Pulsating Effect -->
+                        <div class="pulse-circle" style="width: 240px; height: 240px; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+
+                        <!-- Signal Lines -->
+                        <div class="signal-line" style="top: 80px; right: 40px; transform: rotate(-35deg);">
+                            <div class="signal-dot"></div>
+                        </div>
+                        <div class="signal-line" style="bottom: 80px; right: 40px; transform: rotate(35deg);">
+                            <div class="signal-dot"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-gray-900 bg-opacity-70 rounded">
+                        <h3 class="text-lg font-medium text-sky-300 mb-2">Simulation</h3>
+                        <ul class="text-gray-300 space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                                <span>Environnement virtuel complet</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                                <span>Code réel exécuté dans le navigateur</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                                <span>Intégration avec le réseau via proxy</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - MQTT Topics -->
+            <div class="w-1/2">
+                <h2 class="text-2xl font-semibold text-sky-300 mb-3">Topics MQTT Utilisés</h2>
+                <div class="card p-4">
+                    <!-- Temperature Topic -->
+                    <div class="mqtt-topic temperature">
+                        <div class="topic-icon temperature">
+                            <i class="fas fa-thermometer-half"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium mb-1">homeSecurity/temperature</h4>
+                            <p class="text-sm text-gray-300">Surveillance de température ambiante</p>
+                            <p class="code-snippet text-xs text-orange-300 mt-1">{"value": 21.5, "unit": "C", "timestamp": 1623456789}</p>
+                        </div>
+                    </div>
+
+                    <!-- Motion Topic -->
+                    <div class="mqtt-topic motion">
+                        <div class="topic-icon motion">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium mb-1">homeSecurity/motion</h4>
+                            <p class="text-sm text-gray-300">Détection de mouvement</p>
+                            <p class="code-snippet text-xs text-blue-300 mt-1">{"detected": true, "zone": "living_room", "timestamp": 1623456789}</p>
+                        </div>
+                    </div>
+
+                    <!-- Door Lock Topic -->
+                    <div class="mqtt-topic doorLock">
+                        <div class="topic-icon doorLock">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium mb-1">homeSecurity/doorLock</h4>
+                            <p class="text-sm text-gray-300">État des serrures connectées</p>
+                            <p class="code-snippet text-xs text-green-300 mt-1">{"locked": true, "door": "front", "timestamp": 1623456789}</p>
+                        </div>
+                    </div>
+
+                    <!-- Alert Topic -->
+                    <div class="mqtt-topic alert">
+                        <div class="topic-icon alert">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium mb-1">homeSecurity/alert</h4>
+                            <p class="text-sm text-gray-300">Canal d'alertes sécuritaires</p>
+                            <p class="code-snippet text-xs text-red-300 mt-1">{"type": "intrusion", "severity": "high", "timestamp": 1623456789}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Number -->
+        <div class="absolute bottom-4 right-4 text-gray-400 text-sm">
+            7/31
+        </div>
+    </div>
+</body>
+
+</html>
+<script src='https://www.genspark.ai/slide-inner.js?_v=1'></script>
+<script id="html_badge_script1">
+    window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+        "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDhuCCmFxWEQ0QBqTUo7564sInxbGr4WhUWDiYUsZYzObtsuqsGSvKzmieco9zqxvsgCci5L5aN%2B9D6WtfoQbfa1JkQLFbs2V0jWEqhF7jpB9HLjlRLlAuQJFvAVx2%2F2jTjnec2ob4TKcK2uA1AKauJtaTDsQkAClzYTj0Ta52o9QAHrhKjKStuR%2B7fhCrhbe2HxKd%2B47m2EnjZZK9nCENJhRMAiaMzTeE2gK6po%2FRffWtlxY6NhTflyqIKKXJJT9u%2FDt%2Bs1Qb%2B3Y%2BaE8nebn1uQUCd6rxv7CTKIT%2BpJBQceR%2FsuqbvaLat0WcIxVCFLzeQLfKKoQ%2F7JbaXiK5h%2BhrdyHV1szzgjT8GWPCbHrSlGRdMZ6dDN3D6YDBHLwCUjTHX6HrpDTq%2F9E7MR2TAELLQbuq%2FAhdsoGrmbD56PKiB5N%2FjL57fqTfuyImIfFIzcjHTH3wQHu%2FDoh%2BFlZ41SRkfbp1kmg733hVnLA4EqRZxBFoJXqyQ%2BM%2BSYoeJXwQLHoZ5OYHVttbCBben%2FliLv9wSG9cduvgdHG9i3vs9Cwbei%2Br6Wdcjh8KLKvo7B%2BYYgq1XQvgUVuApHGqiYmWlAB7dEYhOwznULVDOJjDkNporyXuadJr9XWuH0wmcfkT2WiMqwxe9z%2BdEKkD9VuX9O1yboFeq772AABt6HOrQNRJ%2BMaTnPppSczg4SBulplRHcW7dq5y39YE3cxdgJOSBsM0gY%3D";
+    window.__genspark_locale = "en-US";
+    window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDhuCCmFxWEQ0QBqTUo7564sInxbGr4WhUWDiYUsZYzObtsuqsGSvKzmieco9zqxvsgCci5L5aN+9D6WtfoQbfa1JkQLFbs2V0jWEqhF7jpB9HLjlRLlAuQJFvAVx2/2jTjnec2ob4TKcK2uA1AKauJtaTDsQkAClzYTj0Ta52o9QAHrhKjKStuR+7fhCrhbe2HxKd+47m2EnjZZK9nCENJhRMAiaMzTeE2gK6po/RffWtlxY6NhTflyqIKKXJJT9u/Dt+s1Qb+3Y+aE8nebn1uQUCd6rxv7CTKIT+pJBQceR/suqbvaLat0WcIxVCFLzeQLfKKoQ/7JbaXiK5h+hrdyHV1szzgjT8GWPCbHrSlGRdMZ6dDN3D6YDBHLwCUjTHX6HrpDTq/9E7MR2TAELLQbuq/AhdsoGrmbD56PKiB5N/jL57fqTfuyImIfFIzcjHTH3wQHu/Doh+FlZ41SRkfbp1kmg733hVnLA4EqRZxBFoJXqyQ+M+SYoeJXwQLHoZ5OYHVttbCBben/liLv9wSG9cduvgdHG9i3vs9Cwbei+r6Wdcjh8KLKvo7B+YYgq1XQvgUVuApHGqiYmWlAB7dEYhOwznULVDOJjDkNporyXuadJr9XWuH0wmcfkT2WiMqwxe9z+dEKkD9VuX9O1yboFeq772AABt6HOrQNRJ+MaTnPppSczg4SBulplRHcW7dq5y39YE3cxdgJOSBsM0gY=";
+</script>
+
+<script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>

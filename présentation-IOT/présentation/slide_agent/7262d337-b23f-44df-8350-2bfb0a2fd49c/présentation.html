@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>My Reveal.js Presentation</title>
+
+    <!-- Reveal.js CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/black.css" id="theme">
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #000;
+      }
+
+      .reveal,
+      .reveal .slides,
+      .reveal .slides section {
+        height: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      iframe {
+        width: 100%;
+        height: 100% !important;
+        border: none;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+        <!-- Slide 1: Title -->
+        <section>
+          <h1>wesh cv bikhir   <br>mhm hakka ghaykon had l7za9</h1>
+        </section>
+
+        <!-- Slide 2: First webpage -->
+        <section>
+          <iframe src="page1.html"></iframe>
+        </section>
+
+        <!-- Slide 3: Duplicate of first page -->
+        <section>
+          <iframe src="page1.html"></iframe>
+        </section>
+
+         <section>
+          <iframe src="page2.html"></iframe>
+        </section>
+
+        <!-- Slide 4: Thank you -->
+        <section>
+          <h2>dak lmargin  tal men be3d  !</h2>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- Reveal.js JS (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.min.js"></script>
+    <script>
+      Reveal.initialize({width: '100%' ,
+height: '100%',
+margin: 0.04,
+minScale: 0.2,
+maxScale: 2.0,
+  disableLayout: true,
+ center: true 
+});
+    </script>
+
+    <!-- Optional: Auto fullscreen on load -->
+    <!--
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        if (document.fullscreenEnabled) {
+          document.documentElement.requestFullscreen().catch(console.log);
+        }
+      });
+    </script>
+    -->
+
+  </body>
+</html>
