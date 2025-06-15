@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Introduction - IoT Security System</title>
+    <title>Définition de la Problématique et Enjeux de Sécurité</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
-        body {
+       body {
             width: 100vw;
             height: 100vh;
             margin: 0;
@@ -18,7 +18,8 @@
 
         .slide {
             width: 100vw;
-            min-height: 100vw;
+            height: 100vh;
+            min-height: 720px;
             background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
             position: relative;
             overflow: hidden;
@@ -28,14 +29,14 @@
             position: absolute;
             width: 200px;
             height: 173px;
-            background: rgba(59, 130, 246, 0.05);
+            background: rgba(239, 68, 68, 0.05);
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
         }
 
         .circuit-line {
             position: absolute;
             height: 2px;
-            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.3) 50%, rgba(59, 130, 246, 0.1) 100%);
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.3) 50%, rgba(239, 68, 68, 0.1) 100%);
             z-index: 0;
         }
 
@@ -44,35 +45,47 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background-color: rgba(59, 130, 246, 0.4);
+            background-color: rgba(239, 68, 68, 0.4);
             z-index: 1;
         }
 
-        .title-gradient {
-            background: linear-gradient(90deg, #60a5fa, #34d399);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .card {
-            background: rgba(30, 58, 138, 0.15);
+        .problem-card {
+            background: rgba(30, 41, 59, 0.6);
             border-radius: 10px;
-            border-left: 4px solid;
+            border-left: 4px solid #ef4444;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .card:hover {
+        .problem-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.4);
         }
 
         .icon-container {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: rgba(185, 28, 28, 0.2);
+            border: 2px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
         }
     </style>
 </head>
@@ -80,101 +93,100 @@
 <body>
     <div class="slide flex flex-col p-10 relative">
         <!-- Background Elements -->
-        <div class="hexagon opacity-20" style="top: 50px; left: 100px; transform: rotate(25deg);"></div>
-        <div class="hexagon opacity-30" style="top: 180px; left: 900px; transform: rotate(-15deg);"></div>
-        <div class="hexagon opacity-15" style="bottom: 100px; left: 300px; transform: rotate(10deg);"></div>
-        <div class="hexagon opacity-25" style="bottom: 150px; right: 200px; transform: rotate(-20deg);"></div>
+        <div class="hexagon opacity-20" style="top: 50px; left: 150px; transform: rotate(15deg);"></div>
+        <div class="hexagon opacity-30" style="top: 200px; right: 180px; transform: rotate(-15deg);"></div>
+        <div class="hexagon opacity-15" style="bottom: 80px; left: 250px; transform: rotate(10deg);"></div>
+        <div class="hexagon opacity-25" style="bottom: 120px; right: 220px; transform: rotate(-20deg);"></div>
 
         <!-- Circuit Lines -->
-        <div class="circuit-line" style="width: 300px; top: 180px; left: 50px; transform: rotate(15deg);"></div>
-        <div class="circuit-line" style="width: 400px; top: 350px; right: 80px; transform: rotate(-10deg);"></div>
-        <div class="circuit-line" style="width: 250px; bottom: 200px; left: 150px; transform: rotate(-25deg);"></div>
+        <div class="circuit-line" style="width: 350px; top: 150px; left: 50px; transform: rotate(15deg);"></div>
+        <div class="circuit-line" style="width: 450px; top: 320px; right: 60px; transform: rotate(-10deg);"></div>
+        <div class="circuit-line" style="width: 280px; bottom: 180px; left: 120px; transform: rotate(-25deg);"></div>
 
         <!-- Header -->
-        <div class="mb-10 z-10">
-            <h1 class="text-4xl font-bold text-white mb-2">Introduction</h1>
-            <div class="w-20 h-1 bg-gradient-to-r from-blue-400 to-green-400"></div>
+        <div class="mb-8 z-10">
+            <h1 class="text-4xl font-bold text-white mb-2">Définition de la Problématique et Enjeux de Sécurité</h1>
+            <div class="w-20 h-1 bg-gradient-to-r from-red-500 to-red-300"></div>
         </div>
 
-        <!-- Content Cards -->
-        <div class="flex justify-between gap-6 z-10">
-            <!-- Card 1: Smart Home Systems -->
-            <div class="card flex-1 p-6 border-blue-500">
-                <div class="icon-container bg-blue-900 bg-opacity-50 mb-4">
-                    <i class="fas fa-home text-3xl text-blue-400"></i>
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 gap-6 z-10">
+            <!-- Problem 1 -->
+            <div class="problem-card p-6 flex items-start">
+                <div class="icon-container pulse-animation mr-6">
+                    <i class="fas fa-bug text-4xl text-red-400"></i>
                 </div>
-                <h2 class="text-2xl font-semibold text-blue-300 mb-4">Smart Home Systems</h2>
-                <ul class="text-gray-300 space-y-3">
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-blue-400 mt-1 mr-2"></i>
-                        <span>47% d'augmentation du marché en 5 ans</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-blue-400 mt-1 mr-2"></i>
-                        <span>Automatisation & contrôle à distance</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-blue-400 mt-1 mr-2"></i>
-                        <span>Intégration des fonctions essentielles</span>
-                    </li>
-                </ul>
+                <div>
+                    <h2 class="text-2xl font-semibold text-red-300 mb-2">Failles de Sécurité dans les Configurations IoT Traditionnelles</h2>
+                    <ul class="text-gray-300 space-y-1">
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Authentification faible ou inexistante entre les dispositifs</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Communications non chiffrées exposant les données sensibles</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Mise à jour difficile et firmware souvent obsolète</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
-            <!-- Card 2: Rise of IoT Devices -->
-            <div class="card flex-1 p-6 border-green-500">
-                <div class="icon-container bg-green-900 bg-opacity-50 mb-4">
-                    <i class="fas fa-microchip text-3xl text-green-400"></i>
+            <!-- Problem 2 -->
+            <div class="problem-card p-6 flex items-start">
+                <div class="icon-container pulse-animation mr-6">
+                    <i class="fas fa-search-minus text-4xl text-red-400"></i>
                 </div>
-                <h2 class="text-2xl font-semibold text-green-300 mb-4">Montée des Appareils IoT</h2>
-                <ul class="text-gray-300 space-y-3">
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                        <span>25.1 milliards d'appareils prévus en 2025</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                        <span>Interconnectivité croissante</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                        <span>Protocoles de communication légers (MQTT)</span>
-                    </li>
-                </ul>
+                <div>
+                    <h2 class="text-2xl font-semibold text-red-300 mb-2">Absence de Détection d'Intrusion Native dans MQTT</h2>
+                    <ul class="text-gray-300 space-y-1">
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Protocole MQTT conçu pour la performance, pas pour la sécurité</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Aucune protection contre les attaques par force brute</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Vulnérable aux injections malveillantes de données</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
-            <!-- Card 3: Security Needs -->
-            <div class="card flex-1 p-6 border-yellow-500">
-                <div class="icon-container bg-yellow-900 bg-opacity-50 mb-4">
-                    <i class="fas fa-shield-alt text-3xl text-yellow-400"></i>
+            <!-- Problem 3 -->
+            <div class="problem-card p-6 flex items-start">
+                <div class="icon-container pulse-animation mr-6">
+                    <i class="fas fa-bell-slash text-4xl text-red-400"></i>
                 </div>
-                <h2 class="text-2xl font-semibold text-yellow-300 mb-4">Besoin de Sécurité</h2>
-                <ul class="text-gray-300 space-y-3">
-                    <li class="flex items-start">
-                        <i class="fas fa-exclamation-triangle text-yellow-400 mt-1 mr-2"></i>
-                        <span>57% des appareils IoT vulnérables</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-exclamation-triangle text-yellow-400 mt-1 mr-2"></i>
-                        <span>Cyberattaques ciblant les Smart Homes en hausse de 300%</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-exclamation-triangle text-yellow-400 mt-1 mr-2"></i>
-                        <span>Confidentialité & intégrité des données menacées</span>
-                    </li>
-                </ul>
+                <div>
+                    <h2 class="text-2xl font-semibold text-red-300 mb-2">Manque d'Alertes Automatisées dans les Systèmes Existants</h2>
+                    <ul class="text-gray-300 space-y-1">
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Détection tardive des intrusions, souvent après compromission</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Absence de notification en temps réel à l'utilisateur</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-2"></i>
+                            <span>Manque d'intégration entre détection et systèmes d'alerte</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-
-        <!-- Bottom Quote -->
-        <div class="mt-10 bg-opacity-30 bg-blue-900 p-4 rounded-lg z-10">
-            <p class="text-center text-blue-200 italic">
-                "La sécurité est désormais le défi majeur dans l'adoption des technologies IoT par les utilisateurs."
-            </p>
         </div>
 
         <!-- Slide Number -->
         <div class="absolute bottom-4 right-4 text-gray-400 text-sm">
-            2/31
+            3/31
         </div>
     </div>
 </body>
@@ -183,9 +195,9 @@
 <script src='https://www.genspark.ai/slide-inner.js?_v=1'></script>
 <script id="html_badge_script1">
     window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
-        "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDley%2BwrF6P%2Blz4lxKRP2ZE6wWfgxzCwebcaO333BLZgZe1HR%2BWrigMRcvr79PpRHbr4aB57TWRfsmJ7BXKnbbPbupLD7dsrZ4Ej8yxLdwD6MUVO%2BT5TDlZnGhvEiCf1J%2F%2Fa0MulZUZ%2Bus5XXkO6YXocLGrbJ8G7KpqGxw5KsVnPrN%2F4QSxqVl0%2Fo%2BLcm1Q%2FdYQsOx%2BchHnjeGX68GqBWv8Wynrd5YCe3ljGL0YtqOJQrgJHW5ljS65PKehpQMT6034DfcgdzX9CckiVvwby51qJeSdJ8A2IqMcWmdipYZ7v6tijNlRzhwOr54u7KO9C410z46tt7slSITboEWfZjbCJ0xuOhBYA6BHGCEbNfswbzUTS36V4yMlENZUY8S9EsFK1bKIVyPAx%2B%2FE1DjnnBQbDruwfymLW6s9Eml%2FL11T0m7Q%2B4xZ29utEMGMMBp0ljXaZ%2BTq04%2BE%2BV0Y14I6FcRxvZXsoB%2Fhy6XQntuxnuWGK4K5GrEUwL61eyhdJJ315DBtK8OOkX1S5N8y%2BNejVppe4YmLqfJWDB7Xbg95Q9eM5YKkrxye%2Bebn9avOl4DAhDAchhSsVqo5NxFOF76JXl%2BSb%2BhIFqvjIhmsG7tnpf6vAWUBEZhOnqgA5YsUJtrQThQ0UazIxhM7OMIoqfSvKnjg64EWemxHai8fEDnfQq39KvGvhG4q7hgr%2Bd1%2B%2FKsN4vzWrctkvgmezpv3728vBMNAc%3D";
+        "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDnS43Nuf9dy1CdUwRB2JcgFPbdCSlc2qHiO6F%2FeAnLTmuyErG2%2B%2FeZGV3iQLSQwsWTsd7FPbjxXVWLDCi%2FClKylVHTGz8MSMn4rD92SeKIp52Vp4JXsZBS5FWMr60SuX56O12jl08zb%2BCkOCMVSEs9kgGtsT1ucWIFPSr4Clk6J1dpig9xJbyOc%2BHcBEJPxAqG%2BVd3MTtqIwui9TUBYzzCh%2BVzUutMVVWnD50xSS6h4TCTa8oCJFHspnWBFwWJfznCujQc9rbKo7rI%2BNpCvHksc3pgGfxRFNCtrcqehzeurAP27Sm8laolGKl%2FRPqL8OEpooFwvLtHsMGr3bRYcgkrGZyzMIZ0yrfw3GICo3KfSX9XdWkjyLu1I6BfO6BsBhgwz2vU6Vnf1qQ%2F8pC8KqEBj9sdRq80zFzXxDUMA2Dy2xDm9voC5YSe%2FQE%2FywNZHgYC4ZhC5umQznpcm%2BwSHmidCZvbxYB8kYQ4RGmzCZxpqXpmGwUSTdlAhfHNU5R9a2s3g1DMSDk7MiZg%2BoU2MNBmmv%2B7Mxvp5qRPlze9t7KxZDY2ty0X6Z%2Bmb9YfgBku8ZAV4dJpyNm9D0ygofod3Cgsa2Dc8NHD1i7aK8k%2BiwuvV9c2My9GbUj%2BtsTXJDSx%2BKybruoHfZydlnT7OhEgcH71%2FlOLJyTreK0RX7ujCSqefXrAdWhpJQejScEOKOvLsjWYce26NU2GSh9adZj%2BjOorg%3D";
     window.__genspark_locale = "en-US";
-    window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDley+wrF6P+lz4lxKRP2ZE6wWfgxzCwebcaO333BLZgZe1HR+WrigMRcvr79PpRHbr4aB57TWRfsmJ7BXKnbbPbupLD7dsrZ4Ej8yxLdwD6MUVO+T5TDlZnGhvEiCf1J//a0MulZUZ+us5XXkO6YXocLGrbJ8G7KpqGxw5KsVnPrN/4QSxqVl0/o+Lcm1Q/dYQsOx+chHnjeGX68GqBWv8Wynrd5YCe3ljGL0YtqOJQrgJHW5ljS65PKehpQMT6034DfcgdzX9CckiVvwby51qJeSdJ8A2IqMcWmdipYZ7v6tijNlRzhwOr54u7KO9C410z46tt7slSITboEWfZjbCJ0xuOhBYA6BHGCEbNfswbzUTS36V4yMlENZUY8S9EsFK1bKIVyPAx+/E1DjnnBQbDruwfymLW6s9Eml/L11T0m7Q+4xZ29utEMGMMBp0ljXaZ+Tq04+E+V0Y14I6FcRxvZXsoB/hy6XQntuxnuWGK4K5GrEUwL61eyhdJJ315DBtK8OOkX1S5N8y+NejVppe4YmLqfJWDB7Xbg95Q9eM5YKkrxye+ebn9avOl4DAhDAchhSsVqo5NxFOF76JXl+Sb+hIFqvjIhmsG7tnpf6vAWUBEZhOnqgA5YsUJtrQThQ0UazIxhM7OMIoqfSvKnjg64EWemxHai8fEDnfQq39KvGvhG4q7hgr+d1+/KsN4vzWrctkvgmezpv3728vBMNAc=";
+    window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDnS43Nuf9dy1CdUwRB2JcgFPbdCSlc2qHiO6F/eAnLTmuyErG2+/eZGV3iQLSQwsWTsd7FPbjxXVWLDCi/ClKylVHTGz8MSMn4rD92SeKIp52Vp4JXsZBS5FWMr60SuX56O12jl08zb+CkOCMVSEs9kgGtsT1ucWIFPSr4Clk6J1dpig9xJbyOc+HcBEJPxAqG+Vd3MTtqIwui9TUBYzzCh+VzUutMVVWnD50xSS6h4TCTa8oCJFHspnWBFwWJfznCujQc9rbKo7rI+NpCvHksc3pgGfxRFNCtrcqehzeurAP27Sm8laolGKl/RPqL8OEpooFwvLtHsMGr3bRYcgkrGZyzMIZ0yrfw3GICo3KfSX9XdWkjyLu1I6BfO6BsBhgwz2vU6Vnf1qQ/8pC8KqEBj9sdRq80zFzXxDUMA2Dy2xDm9voC5YSe/QE/ywNZHgYC4ZhC5umQznpcm+wSHmidCZvbxYB8kYQ4RGmzCZxpqXpmGwUSTdlAhfHNU5R9a2s3g1DMSDk7MiZg+oU2MNBmmv+7Mxvp5qRPlze9t7KxZDY2ty0X6Z+mb9YfgBku8ZAV4dJpyNm9D0ygofod3Cgsa2Dc8NHD1i7aK8k+iwuvV9c2My9GbUj+tsTXJDSx+KybruoHfZydlnT7OhEgcH71/lOLJyTreK0RX7ujCSqefXrAdWhpJQejScEOKOvLsjWYce26NU2GSh9adZj+jOorg=";
 </script>
 
 <script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>
