@@ -7,7 +7,16 @@
     <title>hello IoT-Based Smart Home Security System </title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    
     <style>
+        .image{
+        border: #0b0a0a;
+       background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
+        display: flex;
+        justify-content:center;
+        border-radius: 10px;
+        
+        }
         body {
             width: 100vw;
             height: 100vh;
@@ -20,11 +29,14 @@
             width: 100vw;
             height: 100vh;
             min-height: 720px;
-            background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
+           background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
             position: relative;
             overflow: hidden;
         }
-
+#logopng{
+    width:45%;
+    height: 130px;
+}
         .hexagon {
             position: absolute;
             width: 200px;
@@ -49,16 +61,46 @@
             z-index: 1;
         }
 
-        .title-gradient {
+         .title-gradient {
             background: linear-gradient(90deg, #60a5fa, #34d399);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
+        #cadretitle{
+            width: 100%;
+             background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
+        }
+    
+        
+    </style>
+    <style>
+        .footer-text {
+    position: fixed;
+    bottom: 10px;
+    font-size: 14px;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  .left-footer {
+    float: left;
+    color: beige;
+    font-size: 26px;
+  }
+
+  .right-footer {
+    float: right;
+     color: beige;
+    font-size: 26px;
+  }
     </style>
 </head>
 
 <body>
-    <div class="slide flex flex-col justify-center items-center p-16 relative overflow-hidden">
+    <div class="image" ><img id="logopng" class="image" src="logo.png"  ></div>
+    <div class="slide flex flex-col justify-center items-center p-16 relative overflow-hidden" style="background-color: #f95e17;">
         <!-- Background Elements -->
         <div class="hexagon opacity-20" style="top: 50px; left: 100px; transform: rotate(25deg);"></div>
         <div class="hexagon opacity-30" style="top: 180px; left: 900px; transform: rotate(-15deg);"></div>
@@ -91,28 +133,29 @@
             </div>
 
             <!-- Title -->
-            <h1 class="text-5xl font-bold text-white tracking-tight mb-4">
-                <span class="title-gradient"> Un système de détection d'intrusion (IDS) dans un réseau IoT </span>
+            <h1 class="text-5xl font-bold text-white tracking-tight mb-4" >
+                <span class="title-gradient" > Développement d'un système de détection d'intrusion (IDS) dans un réseau IoT </span>
             </h1>
-            <h2 class="text-3xl text-blue-300 font-semibold mb-10"></h2>
+            <h2 class="text-3xl text-blue-300 font-semibold mb-10"></h2><br><br><br>
 
             <!-- Author Info -->
-            <div class="bg-opacity-20 bg-blue-900 p-6 rounded-lg shadow-lg backdrop-filter backdrop-blur-sm mb-8 w-3/4">
+            <div id="cadretitle" class="bg-opacity-20 bg-blue-900 p-6 rounded-lg shadow-lg backdrop-filter backdrop-blur-sm mb-8 w-3/4">
                 <div class="text-2xl text-gray-100 mb-2">
                     <i class="fas fa-user-graduate mr-3 text-blue-400"></i>
-                    <span class="font-medium">Présenté par:</span> <span class="text-white">Hssain oubamh - Younes oubella</span>
+                    <span class="font-medium"  style="font-weight: bold; font-style: oblique;">Présenté par:</span> <span class="text-white" style="font-weight: bold;">OUBAMH HSSAIN && OUBELLA YONCE</span>
                 </div>
-                <div class="text-xl text-gray-300 mb-1">
+                <div class="text-2xl text-gray-100 mb-2">
                     <i class="fas fa-chalkboard-teacher mr-3 text-blue-400"></i>
-                    <span class="font-medium">Superviseur: Pr.AMOUNAS</span> <span></span>
+                    <span class="font-medium"  style="font-weight: bold; font-style: oblique;">Encadrante:</span> <span class="text-white"  style="font-weight: bold;"> F.AMOUNAS</span> 
                 </div>
-                <div class="text-xl text-gray-300 mb-1">
+                <div class="text-2xl text-gray-100 mb-2">
                     <i class="fas fa-university mr-3 text-blue-400"></i>
-                    <span class="font-medium">Institution:</span> <span>Faculté des Sciences et Techniques, Errachidia</span>
+                    <span class="font-medium" ></span> <span style="font-weight: bold; font-style: oblique;">Faculté des Sciences et Techniques, Errachidia</span><br>
+
                 </div>
-                <div class="text-xl text-gray-300">
+                <div class="text-2xl text-gray-100 mb-2">
                     <i class="fas fa-calendar-alt mr-3 text-blue-400"></i>
-                    <span class="font-medium">Date:</span> <span>Juin 2025</span>
+                    <span class="font-medium" style="font-weight: bold; font-style: oblique;">Date:</span> <span>Juin 2025</span>
                 </div>
             </div>
         </div>
@@ -124,7 +167,12 @@
             <div class="text-green-300 text-3xl"><i class="fas fa-home"></i></div>
             <div class="w-8 h-0.5 bg-green-300 mx-1"></div>
             <div class="text-green-300 text-2xl"><i class="fas fa-laptop"></i></div>
-        </div>
+        </div><br><br><br><br><br><br>
+
+    <div class="footer-text">
+           <div class="left-footer">Soutenance de projet de fin d'étude</div>
+            <div class="right-footer">Licence Génie Logiciel</div>
+    </div>
     </div>
 </body>
 

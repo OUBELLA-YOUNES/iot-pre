@@ -294,8 +294,8 @@
         <div class="flex flex-row gap-10 z-10">
             <!-- Left Column - ESP32 Wokwi Simulation -->
             <div class="w-1/2">
-                <h2 class="text-2xl font-semibold text-sky-300 mb-3">ESP32 sur Wokwi</h2>
-                <div class="card p-4 h-auto">
+                <h2 class="text-2xl font-semibold text-sky-300 mb-3"style="color:red"  >ESP32 sur Wokwi</h2>
+                <div class="card p-4 h-auto"  style="height: 650px;">
                     <div class="esp32-simulation">
                         <!-- Wokwi Badge -->
                         <div class="wokwi-badge">
@@ -334,31 +334,31 @@
                         </div>
 
                         <!-- Pulsating Effect -->
-                        <div class="pulse-circle" style="width: 240px; height: 240px; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+                        <div class="pulse-circle" style="width: 240px; height: 240px; top: 50%; left: 50%; transform: translate(-50%, -50%);" ></div>
 
                         <!-- Signal Lines -->
-                        <div class="signal-line" style="top: 80px; right: 40px; transform: rotate(-35deg);">
+                        <div class="signal-line" style="top: 80px; right: 40px; transform: rotate(-35deg);" >
+                            <div class="signal-dot" ></div>
+                        </div>
+                        <div class="signal-line" style="bottom: 80px; right: 40px; transform: rotate(35deg);" >
                             <div class="signal-dot"></div>
                         </div>
-                        <div class="signal-line" style="bottom: 80px; right: 40px; transform: rotate(35deg);">
-                            <div class="signal-dot"></div>
-                        </div>
-                    </div>
+                    </div><br><br><br>
 
-                    <div class="mt-4 p-3 bg-gray-900 bg-opacity-70 rounded">
-                        <h3 class="text-lg font-medium text-sky-300 mb-2">Simulation</h3>
+                    <div class="mt-4 p-3 bg-gray-900 bg-opacity-70 rounded" style="height: 250px;">
+                        <h3 class="text-lg font-medium text-sky-300 mb-2" style="color: #97eab0;font-size: 23px;">Simulation</h3>
                         <ul class="text-gray-300 space-y-2">
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                                <span>Environnement virtuel complet</span>
+                                <span style="font-size: 20px;">Environnement virtuel complet</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                                <span>Code réel exécuté dans le navigateur</span>
+                                <span style="font-size: 20px;">Code réel exécuté dans le navigateur</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                                <span>Intégration avec le réseau via proxy</span>
+                                <span style="font-size: 20px;">Intégration avec le réseau via proxy</span>
                             </li>
                         </ul>
                     </div>
@@ -368,7 +368,7 @@
             <!-- Right Column - MQTT Topics -->
             <div class="w-1/2">
                 <h2 class="text-2xl font-semibold text-sky-300 mb-3">Topics MQTT Utilisés</h2>
-                <div class="card p-4">
+                <div class="card p-4" style="height: 650px;">
                     <!-- Temperature Topic -->
                     <div class="mqtt-topic temperature">
                         <div class="topic-icon temperature">
@@ -379,7 +379,7 @@
                             <p class="text-sm text-gray-300">Surveillance de température ambiante</p>
                             <p class="code-snippet text-xs text-orange-300 mt-1">{"value": 21.5, "unit": "C", "timestamp": 1623456789}</p>
                         </div>
-                    </div>
+                    </div><br><br>
 
                     <!-- Motion Topic -->
                     <div class="mqtt-topic motion">
@@ -391,7 +391,7 @@
                             <p class="text-sm text-gray-300">Détection de mouvement</p>
                             <p class="code-snippet text-xs text-blue-300 mt-1">{"detected": true, "zone": "living_room", "timestamp": 1623456789}</p>
                         </div>
-                    </div>
+                    </div><br><br>
 
                     <!-- Door Lock Topic -->
                     <div class="mqtt-topic doorLock">
@@ -403,7 +403,7 @@
                             <p class="text-sm text-gray-300">État des serrures connectées</p>
                             <p class="code-snippet text-xs text-green-300 mt-1">{"locked": true, "door": "front", "timestamp": 1623456789}</p>
                         </div>
-                    </div>
+                    </div><br><br>
 
                     <!-- Alert Topic -->
                     <div class="mqtt-topic alert">
