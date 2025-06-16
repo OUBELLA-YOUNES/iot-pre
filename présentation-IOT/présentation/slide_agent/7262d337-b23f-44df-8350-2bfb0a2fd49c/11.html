@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse des Vulnérabilités : Attaques par Force Brute</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            min-height: 720px;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hexagon {
+            position: absolute;
+            width: 200px;
+            height: 173px;
+            background: rgba(239, 68, 68, 0.05);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        .circuit-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.3) 50%, rgba(239, 68, 68, 0.1) 100%);
+            z-index: 0;
+        }
+
+        .circuit-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(239, 68, 68, 0.4);
+            z-index: 1;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), 0 0 10px rgba(239, 68, 68, 0.4);
+            border-color: rgba(239, 68, 68, 0.6);
+        }
+
+        .pulse-red {
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .attack-animation {
+            animation: attack 4s ease-in-out infinite;
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ef4444;
+        }
+
+        @keyframes attack {
+            0% {
+                opacity: 0;
+                transform: translateX(0) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(160px) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(320px) scale(0.5);
+            }
+        }
+
+        .password-attempt {
+            position: absolute;
+            background-color: rgba(30, 41, 59, 0.9);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            animation: fadeInOut 2s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translateY(0px);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-10px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        .stat-box {
+            position: relative;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 8px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.6);
+        }
+
+        .progress-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, #ef4444, #7f1d1d);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide flex flex-col p-10 relative">
+        <!-- Background Elements -->
+        <div class="hexagon opacity-20" style="top: 120px; left: 250px; transform: rotate(15deg);"></div>
+        <div class="hexagon opacity-30" style="top: 280px; right: 220px; transform: rotate(-10deg);"></div>
+        <div class="hexagon opacity-15" style="bottom: 120px; left: 200px; transform: rotate(5deg);"></div>
+
+        <!-- Circuit Lines -->
+        <div class="circuit-line" style="width: 350px; top: 180px; left: 100px; transform: rotate(15deg);"></div>
+        <div class="circuit-line" style="width: 280px; top: 400px; right: 150px; transform: rotate(-8deg);"></div>
+        <div class="circuit-line" style="width: 320px; bottom: 150px; left: 80px; transform: rotate(-12deg);"></div>
+
+        <!-- Header -->
+        <div class="mb-6 z-10">
+            <h1 class="text-4xl font-bold text-white mb-2">Analyse des Vulnérabilités : Attaques par Force Brute</h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-red-500 to-red-300"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex gap-6 z-10">
+            <!-- Left Section: Attack Visualization -->
+            <div class="w-1/2">
+                <div class="card p-6 h-full relative">
+                    <h2 class="text-3xl font-semibold text-red-400 mb-4">Absence de Rate Limiting</h2>
+
+                    <div class="relative flex items-center justify-center h-96">
+                        <!-- Attacker -->
+                        <div class="absolute left-0 top-1/2 transform -translate-y-1/2 flex flex-col items-center">
+                            <div class="w-20 h-20 bg-gray-800 rounded-lg flex items-center justify-center mb-2 pulse-red">
+                                <i class="fas fa-user-ninja text-red-500 text-4xl"></i>
+                            </div>
+                            <span class="text-gray-300">Attaquant</span>
+                        </div>
+
+                        <!-- MQTT Broker -->
+                        <div class="absolute right-0 top-1/2 transform -translate-y-1/2 flex flex-col items-center">
+                            <div class="w-20 h-20 bg-gray-800 rounded-lg flex items-center justify-center mb-2">
+                                <i class="fas fa-server text-sky-400 text-4xl"></i>
+                            </div>
+                            <span class="text-gray-300">Broker MQTT</span>
+                        </div>
+
+                        <!-- Attack Lines -->
+                        <div class="w-full h-0.5 bg-gray-700 absolute top-1/2"></div>
+
+                        <!-- Animated Attack Packets -->
+                        <div class="attack-animation" style="top: calc(50% - 5px); left: 80px; animation-delay: 0s;"></div>
+                        <div class="attack-animation" style="top: calc(50% - 5px); left: 80px; animation-delay: 0.8s;"></div>
+                        <div class="attack-animation" style="top: calc(50% - 5px); left: 80px; animation-delay: 1.6s;"></div>
+                        <div class="attack-animation" style="top: calc(50% - 5px); left: 80px; animation-delay: 2.4s;"></div>
+                        <div class="attack-animation" style="top: calc(50% - 5px); left: 80px; animation-delay: 3.2s;"></div>
+
+                        <!-- Password Attempts -->
+                        <div class="password-attempt" style="left: 120px; top: calc(50% - 30px); animation-delay: 0s;">admin:password</div>
+                        <div class="password-attempt" style="left: 180px; top: calc(50% - 30px); animation-delay: 0.8s;">mqtt:mqtt123</div>
+                        <div class="password-attempt" style="left: 240px; top: calc(50% - 30px); animation-delay: 1.6s;">user:1234</div>
+                        <div class="password-attempt" style="left: 140px; top: calc(50% - 30px); animation-delay: 2.4s;">iot:iot</div>
+                        <div class="password-attempt" style="left: 200px; top: calc(50% - 30px); animation-delay: 3.2s;">root:toor</div>
+                    </div>
+
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <div class="flex justify-between text-sm text-gray-400 mb-1">
+                            <span>Tentatives</span>
+                            <span>Illimitées</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="progress-bar w-full rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Section: Details & Risks -->
+            <div class="w-1/2 flex flex-col gap-4">
+                <!-- No Rate Limiting -->
+                <div class="card p-5 flex items-start">
+                    <div class="mr-4 mt-1 text-4xl text-red-500">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-white mb-1">Aucune Limitation de Débit</h3>
+                        <ul class="text-gray-300 space-y-1 ml-5 list-disc">
+                            <li>Mosquitto ne limite pas le nombre de tentatives de connexion</li>
+                            <li>Attaques à haute vitesse possibles (>1000 tentatives/seconde)</li>
+                            <li>Aucun verrouillage après échecs répétés</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Weak Authentication -->
+                <div class="card p-5 flex items-start">
+                    <div class="mr-4 mt-1 text-4xl text-red-500">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-white mb-1">Identifiants Vulnérables</h3>
+                        <ul class="text-gray-300 space-y-1 ml-5 list-disc">
+                            <li>Mots de passe par défaut rarement modifiés</li>
+                            <li>Authentification simple par nom/mot de passe</li>
+                            <li>Identifiants souvent stockés en clair</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class="flex gap-4 mt-2">
+                    <div class="stat-box w-1/2">
+                        <h4 class="text-lg text-gray-400 mb-1">Temps moyen pour forcer</h4>
+                        <div class="flex items-end">
+                            <span class="text-4xl font-bold text-red-400">3.5</span>
+                            <span class="text-lg text-gray-300 ml-2 mb-1">minutes</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">Pour un mot de passe de 8 caractères avec dictionnaire</p>
+                    </div>
+                    <div class="stat-box w-1/2">
+                        <h4 class="text-lg text-gray-400 mb-1">Dispositifs vulnérables</h4>
+                        <div class="flex items-end">
+                            <span class="text-4xl font-bold text-red-400">76%</span>
+                            <span class="text-lg text-gray-300 ml-2 mb-1">des brokers</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">Exposés sur Internet sans protection adéquate</p>
+                    </div>
+                </div>
+
+                <!-- Alert Box -->
+                <div class="bg-red-900 bg-opacity-30 border border-red-500 rounded-lg p-4 mt-2">
+                    <div class="flex items-start">
+                        <div class="text-red-500 text-2xl mr-3 mt-1">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-red-400 text-lg font-semibold">Risque Critique</h4>
+                            <p class="text-gray-300 text-sm">Un attaquant ayant accès au broker MQTT peut contrôler tous les appareils connectés, écouter les communications privées et injecter des commandes malveillantes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Number -->
+        <div class="absolute bottom-4 right-4 text-gray-400 text-sm">
+            9/31
+        </div>
+    </div>
+</body>
+
+</html>
+<script src='https://www.genspark.ai/slide-inner.js?_v=1'></script>
+<script id="html_badge_script1">
+    window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+        "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDpA3RRTo3P0PTTVUjMauguFH295TUIt%2F1fYe9%2FNzcpwPENPDbGrcVtSTVLM0Iz6G9hF8%2BDQwqXjHN5EWHS0m%2FvzCyH9Yoznn6AcNV%2BLCxvoUf8Q4vGJ9k2PB3Y74EIQaTexlK1vD3AGlN4YFzRRGu58g49mWKjtRcHfRj1kikgi%2BDpg8yIcBXd3hW66B3B%2F5PYci4hDZr8OqIUk6kJBtl9t1BKGbNTWHAoEYb2slP%2FRmiiv5KfpKRMv2BveeJ39q%2FiZo%2FGEHD%2FgEO0HmQFp5%2BeaRwrEJ7gNu%2FJII8q283MumiUQ7irRHo4f6v0mzvp8iQ8kyFHZN%2BAqgZtKmxdIsD82FjhpBbHIbTDxMNDl5ddSORCUpRzZybbcS7OiFQTwm17tYek7nPBju3UGELcuYcmD%2FMb9EGutMcERSQScDe5qWDg6bAULfyEkgNnuvIgFF5me3Nwnrnid5tTttOalIJlhwZupdRiQfAXA%2FFzuzTEeSOzP%2FBaja2SlwxIGhgooIvVChyhOGZo5djZS9mzQvTSDOz%2BiBhFrDZlmCbX%2BVx1VEme9SQx%2FmyB7jU%2BbeugLYWMztXRz7UZBSZsM3H3q9Wa313M8aduCvo%2BDTweLMlrPdpxUqSLgj2S9a%2Fsos4NebJGpMsBV7lbedsgFg1lNm5dsU%2FgZUBVyXgJUH08%2BiQccHHuLysWUAiLQfKnlDfxHneYOBHg2i9MREIlsAyo%2Fm3XY%3D";
+    window.__genspark_locale = "en-US";
+    window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDpA3RRTo3P0PTTVUjMauguFH295TUIt/1fYe9/NzcpwPENPDbGrcVtSTVLM0Iz6G9hF8+DQwqXjHN5EWHS0m/vzCyH9Yoznn6AcNV+LCxvoUf8Q4vGJ9k2PB3Y74EIQaTexlK1vD3AGlN4YFzRRGu58g49mWKjtRcHfRj1kikgi+Dpg8yIcBXd3hW66B3B/5PYci4hDZr8OqIUk6kJBtl9t1BKGbNTWHAoEYb2slP/Rmiiv5KfpKRMv2BveeJ39q/iZo/GEHD/gEO0HmQFp5+eaRwrEJ7gNu/JII8q283MumiUQ7irRHo4f6v0mzvp8iQ8kyFHZN+AqgZtKmxdIsD82FjhpBbHIbTDxMNDl5ddSORCUpRzZybbcS7OiFQTwm17tYek7nPBju3UGELcuYcmD/Mb9EGutMcERSQScDe5qWDg6bAULfyEkgNnuvIgFF5me3Nwnrnid5tTttOalIJlhwZupdRiQfAXA/FzuzTEeSOzP/Baja2SlwxIGhgooIvVChyhOGZo5djZS9mzQvTSDOz+iBhFrDZlmCbX+Vx1VEme9SQx/myB7jU+beugLYWMztXRz7UZBSZsM3H3q9Wa313M8aduCvo+DTweLMlrPdpxUqSLgj2S9a/sos4NebJGpMsBV7lbedsgFg1lNm5dsU/gZUBVyXgJUH08+iQccHHuLysWUAiLQfKnlDfxHneYOBHg2i9MREIlsAyo/m3XY=";
+</script>
+
+<script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>

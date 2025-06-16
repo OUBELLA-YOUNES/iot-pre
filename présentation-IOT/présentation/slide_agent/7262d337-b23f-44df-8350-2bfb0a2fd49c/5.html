@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Périmètre et Limitations de l’Implémentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+         body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            min-height: 720px;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hexagon {
+            position: absolute;
+            width: 200px;
+            height: 173px;
+            background: rgba(56, 189, 248, 0.05);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        .circuit-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0.3) 50%, rgba(56, 189, 248, 0.1) 100%);
+            z-index: 0;
+        }
+
+        .circuit-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(56, 189, 248, 0.4);
+            z-index: 1;
+        }
+
+        .tech-card {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 2px solid #38bdf8;
+            height: 100%;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.4);
+        }
+
+        .section-card {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 10px;
+            border-left: 4px solid #38bdf8;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.4);
+        }
+
+        .icon-container {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(14, 165, 233, 0.15);
+            border: 2px solid rgba(56, 189, 248, 0.5);
+            margin: 0 auto 0.5rem auto;
+        }
+
+        .glow-effect {
+            animation: glow 3s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 5px 0 rgba(56, 189, 248, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 20px 5px rgba(56, 189, 248, 0.5);
+            }
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1rem;
+        }
+        span,i{
+            font-size: 26px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide flex flex-col p-10 relative">
+        <!-- Background Elements -->
+        <div class="hexagon opacity-20" style="top: 80px; left: 200px; transform: rotate(15deg);"></div>
+        <div class="hexagon opacity-30" style="top: 250px; right: 150px; transform: rotate(-15deg);"></div>
+        <div class="hexagon opacity-15" style="bottom: 100px; left: 220px; transform: rotate(10deg);"></div>
+        <div class="hexagon opacity-25" style="bottom: 150px; right: 250px; transform: rotate(-20deg);"></div>
+
+        <!-- Circuit Lines -->
+        <div class="circuit-line" style="width: 400px; top: 180px; left: 30px; transform: rotate(15deg);"></div>
+        <div class="circuit-line" style="width: 500px; top: 350px; right: 40px; transform: rotate(-10deg);"></div>
+        <div class="circuit-line" style="width: 300px; bottom: 200px; left: 100px; transform: rotate(-25deg);"></div>
+
+        <!-- Header -->
+        <div class="mb-6 z-10">
+            <h1 class="text-4xl font-bold text-white mb-2">Périmètre et Limitations de l’Implémentation</h1>
+            <div class="w-20 h-1 bg-gradient-to-r from-sky-500 to-sky-300"></div>
+        </div>
+
+        <!-- Technologies Section -->
+        <div class="mb-6 z-10">
+            <h2 class="text-2xl font-semibold text-sky-300 mb-4" style="color: rgb(60, 230, 148);font-size: 30px;">Technologies Utilisées</h2>
+            <div class="tech-grid">
+                <!-- ESP32 -->
+                <div class="tech-card p-4 flex flex-col items-center text-center">
+                    <div class="icon-container">
+                        <i class="fas fa-microchip text-3xl text-sky-400"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">ESP32</h3>
+                    <p class="text-gray-300 text-sm">Microcontrôleur IoT</p>
+                </div>
+
+                <!-- MQTT -->
+                <div class="tech-card p-4 flex flex-col items-center text-center">
+                    <div class="icon-container">
+                        <i class="fas fa-exchange-alt text-3xl text-sky-400"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">MQTT</h3>
+                    <p class="text-gray-300 text-sm">Protocole de messagerie</p>
+                </div>
+
+                <!-- Suricata -->
+                <div class="tech-card p-4 flex flex-col items-center text-center">
+                    <div class="icon-container">
+                        <i class="fas fa-shield-alt text-3xl text-sky-400"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">Suricata</h3>
+                    <p class="text-gray-300 text-sm">Système de détection d'intrusion</p>
+                </div>
+
+                <!-- Node-RED -->
+                <div class="tech-card p-4 flex flex-col items-center text-center">
+                    <div class="icon-container">
+                        <i class="fas fa-project-diagram text-3xl text-sky-400"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">Node-RED</h3>
+                    <p class="text-gray-300 text-sm">Outil d'automatisation</p>
+                </div>
+
+                <!-- Twilio -->
+                <div class="tech-card p-4 flex flex-col items-center text-center">
+                    <div class="icon-container">
+                        <i class="fas fa-sms text-3xl text-sky-400"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">Twilio</h3>
+                    <p class="text-gray-300 text-sm">Service de notifications</p>
+                </div>
+
+                <!-- InfluxDB -->
+                <div class="tech-card p-4 flex flex-col items-center text-center">
+                    <div class="icon-container">
+                        <i class="fas fa-database text-3xl text-sky-400"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">InfluxDB</h3>
+                    <p class="text-gray-300 text-sm">Base de données temporelles</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Limitations and Detection Focus -->
+        <div class="grid grid-cols-2 gap-6 z-10 flex-grow">
+            <!-- Limitations -->
+            <div class="section-card p-6" style="height: 450px;">
+                <div class="flex items-center mb-4">
+                    <div class="bg-sky-800 bg-opacity-50 p-3 rounded-lg mr-4">
+                        <i class="fas fa-exclamation-triangle text-2xl text-yellow-400" style="font-size: 30px;"></i>
+                    </div>
+                    <h2 class="text-2xl font-semibold text-sky-300" style="color: rgb(255, 0, 0); font-size: 30px;">Limitations</h2>
+                </div>
+                <ul class="text-gray-300 space-y-3">
+                    <li class="flex items-start">
+                        <i class="fas fa-angle-right text-sky-400 mt-1 mr-2"></i>
+                        <span>Simulation uniquement (pas de matériel physique réel)</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-angle-right text-sky-400 mt-1 mr-2"></i>
+                        <span>Environnement de test contrôlé</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-angle-right text-sky-400 mt-1 mr-2"></i>
+                        <span>Pas de protection active contre les attaques</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-angle-right text-sky-400 mt-1 mr-2"></i>
+                        <span>Sécurité limitée à la détection et l'alerte</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Detection Focus -->
+            <div class="section-card p-6" style="height: 450px;">
+                <div class="flex items-center mb-4">
+                    <div class="bg-sky-800 bg-opacity-50 p-3 rounded-lg mr-4">
+                        <i class="fas fa-search text-2xl text-sky-400"style="color: rgb(185, 234, 213);"></i>
+                    </div>
+                    <h2 class="text-2xl font-semibold text-sky-300" style="color: rgb(161, 216, 98);">Focus de Détection</h2>
+                </div>
+                <ul class="text-gray-300 space-y-3">
+                    <li class="flex items-start">
+                        <i class="fas fa-angle-right text-sky-400 mt-1 mr-2"></i>
+                        <span><strong class="text-white">Attaques par force brute</strong> sur les identifiants MQTT</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-angle-right text-sky-400 mt-1 mr-2"></i>
+                        <span><strong class="text-white">Trafic MQTT anormal</strong> et comportements suspects</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-angle-right text-sky-400 mt-1 mr-2"></i>
+                        <span><strong class="text-white">Tentatives d'accès non autorisé</strong> aux topics MQTT</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-angle-right text-sky-400 mt-1 mr-2"></i>
+                        <span><strong class="text-white">Injection de données malveillantes</strong> dans le flux MQTT</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide Number -->
+        <div class="absolute bottom-4 right-4 text-gray-400 text-sm">
+            5/31
+        </div>
+    </div>
+</body>
+
+</html>
+<script src='https://www.genspark.ai/slide-inner.js?_v=1'></script>
+<script id="html_badge_script1">
+    window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+        "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDrIFKzXcHqFS7T8Z%2FFLtfzl%2F2qE9SebBWN2SxZCIln7%2BzDvKtC8QC448FMQIUCDSXk%2B2sXpZUK2xdYD1iijLkf2jO52BjYXIJxy1Cv2Rb1XKyIvFEl1Z1xKMT7aVpSXfqdVopRt%2Fr8Xoy6d0yzAUHRO8dfZl%2BPjE97cZXh3VLWW9Kb%2FCnQ91bnI4UkP1%2FGL3DY6QkGJxP7%2FVpuo%2F9dYs5RQ%2FLNe558fRDr1T1UCZ5%2Fm7UprhOJGlmDi9SvVIIJhbk%2BP2h6EO9ah%2BVmlUW1GrLuC39yQchRvjnM%2BveMEEAZ2OJWBjiHNBOoPwM1ksf4daNxbM0N5vOEVvjmW3cpPJCehi%2FY8g9j4XCNoJfkc2XtnS9RlpMhnANWNxOskUghCF9QnB79KZgX77A%2FwUiFfEBB%2FGoR1iQweCaJUA3PJ%2B8QtwPKjq8Fn7IkRm7U86LdKC4L4ScgXYj8RaTCmQHjfyw3oqmnOu0yte9FRz3j%2B4h7%2FjhJ%2FwZJTJSkpZn10VI8FAr92XczJHkKQVYiw7RGxwC334318Qllx%2B92%2Bz2HOxfUgwS2JcEH8zRhzS%2FriMiEN43CvThXy3RXFd9m3kp4NhYcDjD1ncT9IdajTRroOLojWBDCV9F1PpnFYqJnJz1FJUWWHg8KY5FFtaPDJVK3p0St5Eob2ngU%2B2nM%2B6chfhBtDeNR1je9JMYJu1jPhZoBF4l%2Blqag5zamYR4a1sfWiaWkI%3D";
+    window.__genspark_locale = "en-US";
+    window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDrIFKzXcHqFS7T8Z/FLtfzl/2qE9SebBWN2SxZCIln7+zDvKtC8QC448FMQIUCDSXk+2sXpZUK2xdYD1iijLkf2jO52BjYXIJxy1Cv2Rb1XKyIvFEl1Z1xKMT7aVpSXfqdVopRt/r8Xoy6d0yzAUHRO8dfZl+PjE97cZXh3VLWW9Kb/CnQ91bnI4UkP1/GL3DY6QkGJxP7/Vpuo/9dYs5RQ/LNe558fRDr1T1UCZ5/m7UprhOJGlmDi9SvVIIJhbk+P2h6EO9ah+VmlUW1GrLuC39yQchRvjnM+veMEEAZ2OJWBjiHNBOoPwM1ksf4daNxbM0N5vOEVvjmW3cpPJCehi/Y8g9j4XCNoJfkc2XtnS9RlpMhnANWNxOskUghCF9QnB79KZgX77A/wUiFfEBB/GoR1iQweCaJUA3PJ+8QtwPKjq8Fn7IkRm7U86LdKC4L4ScgXYj8RaTCmQHjfyw3oqmnOu0yte9FRz3j+4h7/jhJ/wZJTJSkpZn10VI8FAr92XczJHkKQVYiw7RGxwC334318Qllx+92+z2HOxfUgwS2JcEH8zRhzS/riMiEN43CvThXy3RXFd9m3kp4NhYcDjD1ncT9IdajTRroOLojWBDCV9F1PpnFYqJnJz1FJUWWHg8KY5FFtaPDJVK3p0St5Eob2ngU+2nM+6chfhBtDeNR1je9JMYJu1jPhZoBF4l+lqag5zamYR4a1sfWiaWkI=";
+</script>
+
+<script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>

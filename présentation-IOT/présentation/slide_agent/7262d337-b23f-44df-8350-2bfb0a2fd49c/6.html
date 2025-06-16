@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture Globale du Système IoT Sécurisé</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.0.0/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            min-height: 720px;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hexagon {
+            position: absolute;
+            width: 200px;
+            height: 173px;
+            background: rgba(56, 189, 248, 0.05);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        .circuit-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0.3) 50%, rgba(56, 189, 248, 0.1) 100%);
+            z-index: 0;
+        }
+
+        .circuit-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(56, 189, 248, 0.4);
+            z-index: 1;
+        }
+
+        .component-card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+
+        .component-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), 0 0 10px rgba(56, 189, 248, 0.4);
+            border-color: rgba(56, 189, 248, 0.6);
+        }
+
+        .icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(14, 165, 233, 0.2);
+            border: 2px solid rgba(56, 189, 248, 0.4);
+            margin-right: 0.75rem;
+        }
+
+        .mermaid {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        .diagram-container {
+            position: relative;
+            height: 320px;
+            margin: 1rem 0 2rem;
+            overflow: visible;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(56, 189, 248, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+            }
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.75rem;
+        }
+    
+
+    </style>
+</head>
+
+<body>
+    <div class="slide flex flex-col p-10 relative">
+        <!-- Background Elements -->
+        <div class="hexagon opacity-20" style="top: 50px; left: 150px; transform: rotate(10deg);"></div>
+        <div class="hexagon opacity-30" style="top: 220px; right: 120px; transform: rotate(-15deg);"></div>
+        <div class="hexagon opacity-15" style="bottom: 80px; left: 250px; transform: rotate(5deg);"></div>
+        <div class="hexagon opacity-25" style="bottom: 120px; right: 220px; transform: rotate(-10deg);"></div>
+
+        <!-- Circuit Lines -->
+        <div class="circuit-line" style="width: 450px; top: 150px; left: 50px; transform: rotate(10deg);"></div>
+        <div class="circuit-line" style="width: 350px; top: 320px; right: 80px; transform: rotate(-5deg);"></div>
+        <div class="circuit-line" style="width: 280px; bottom: 180px; left: 130px; transform: rotate(-15deg);"></div>
+
+        <!-- Header -->
+        <div class="mb-3 z-10">
+            <h1 class="text-4xl font-bold text-white mb-2">Architecture Globale du Système IoT Sécurisé</h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-sky-500 to-sky-300"></div>
+        </div>
+
+        <!-- Architecture Diagram -->
+        <div class="diagram-container z-10">
+            <div class="mermaid">
+                
+            </div>
+        </div>
+
+        <!-- Component Descriptions -->
+        <div class="components-grid mt-2 z-10">
+            <!-- ESP32 -->
+            <div class="component-card">
+                <div class="flex items-center mb-1">
+                    <div class="icon-circle pulse">
+                        <i class="fas fa-microchip text-lg text-sky-400"></i>
+                    </div>
+                    <h3 class="font-bold text-white">ESP32</h3>
+                </div>
+                <p class="text-sm text-gray-300" style=" font-size: 18px;">Publie des données de capteurs via MQTT</p>
+            </div>
+
+            <!-- Mosquitto Broker -->
+            <div class="component-card" style="height: 200px;">
+                <div class="flex items-center mb-1">
+                    <div class="icon-circle">
+                        <i class="fas fa-exchange-alt text-lg text-sky-400"></i>
+                    </div>
+                    <h3 class="font-bold text-white">Mosquitto</h3>
+                </div>
+                <p class="text-sm text-gray-300" style=" font-size: 18px;">Broker centralisé recevant toutes les données MQTT</p>
+            </div>
+
+            <!-- Suricata -->
+            <div class="component-card">
+                <div class="flex items-center mb-1">
+                    <div class="icon-circle">
+                        <i class="fas fa-shield-alt text-lg text-red-400"></i>
+                    </div>
+                    <h3 class="font-bold text-white">Suricata</h3>
+                </div>
+                <p class="text-sm text-gray-300"style=" font-size: 18px;">Inspecte le trafic réseau pour détecter les intrusions</p>
+            </div>
+
+            <!-- Node-RED -->
+            <div class="component-card">
+                <div class="flex items-center mb-1">
+                    <div class="icon-circle">
+                        <i class="fas fa-project-diagram text-lg text-sky-400"></i>
+                    </div>
+                    <h3 class="font-bold text-white">Node-RED</h3>
+                </div>
+                <p class="text-sm text-gray-300" style=" font-size: 18px;">Automatise le flux de travail et traite les alertes</p>
+            </div>
+
+            <!-- InfluxDB -->
+            <div class="component-card">
+                <div class="flex items-center mb-1">
+                    <div class="icon-circle">
+                        <i class="fas fa-database text-lg text-sky-400"></i>
+                    </div>
+                    <h3 class="font-bold text-white">InfluxDB</h3>
+                </div>
+                <p class="text-sm text-gray-300"style=" font-size: 18px;">Stocke les données d'intrusion en séries temporelles</p>
+            </div>
+
+            <!-- Twilio -->
+            <div class="component-card">
+                <div class="flex items-center mb-1">
+                    <div class="icon-circle">
+                        <i class="fas fa-sms text-lg text-sky-400"></i>
+                    </div>
+                    <h3 class="font-bold text-white">Twilio</h3>
+                </div>
+                <p class="text-sm text-gray-300"style=" font-size: 18px;">Envoie des alertes SMS en temps réel</p>
+            </div>
+        </div>
+
+
+
+
+        <!-- Key Benefits Section -->
+        <div class="mt-6 z-10">
+            <div class="section-title">
+                <h3 class="text-xl font-semibold text-sky-300 mb-2">Points Clés de l'Architecture</h3>
+                <div class="w-16 h-0.5 bg-sky-500 mb-3"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-5">
+                <div class="flex items-start">
+                    <div class="mr-2 text-sky-400">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <p class="text-sm text-gray-300">Modularité pour faciliter l'extension</p>
+                </div>
+                <div class="flex items-start">
+                    <div class="mr-2 text-sky-400">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <p class="text-sm text-gray-300">Détection en temps réel</p>
+                </div>
+                <div class="flex items-start">
+                    <div class="mr-2 text-sky-400">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <p class="text-sm text-gray-300">Alertes immédiates à l'utilisateur</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Number -->
+        <div class="absolute bottom-4 right-4 text-gray-400 text-sm">
+            6/31
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                theme: 'dark',
+                securityLevel: 'loose',
+                flowchart: {
+                    curve: 'basis',
+                    useMaxWidth: true
+                }
+            });
+
+            setTimeout(function() {
+                mermaid.init(undefined, document.querySelector('.mermaid'));
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>
+<script src='https://www.genspark.ai/slide-inner.js?_v=1'></script>
+<script id="html_badge_script1">
+    window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+        "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDgMXCKEbPxR7qZiLyEghQBOvY9rIJ%2Fm%2B8glJs2Lc%2BUs%2FWafMvxxu64Q8aytjyFym9i9tQZlDX5u7GNgv6c9C27ATPHUP5H%2BVttxAPlplkKk8B%2ByYds79EEhYZ0qsGLIJiQQJ%2BNZ%2B2w%2FbN5SzZ7CMnzk6iJnYJRoR5BvNCfUq2R19A%2BWViO7J8qli%2Bm%2Bli%2BfGnZHvMAP%2BwCMex%2Br%2BMaKLYipJbKSdiZd%2BS%2FsTZYHs4113S17MtJ1pEqOhAETJP8T96RYo4DdaFUYxeSlP414h00JgR9hr3Vv1mlntFzuM9gEjHBgSeJ8DbTUg%2By69hI5dPBYZvsgiC%2B%2B38yjyNzUIc%2FNFB2NgPJMYKRDIUirYeX1XWlAiRukt8t6El4nNLh%2F0r3phbQ37IgarvgabiSMOXoxseMCHGXicwmP8nOCbux4Nwocsw6ReujQi5OFSAFmSIQC8x2q6Bsr6gmL2OBordVOO6xMErsmVPikT7dyJ7%2BUL9xJLiMPu8m3hywS4bctUWv8bHuD9HixckyyGqUEQiKKXoz4wdmoahBrgBjrRBi3d%2BYza5G1NRgVCj2m9wIiKwVkSx6OJCb11G3pTKBuPNwBeQXUnDsplGA3gwNBxSGBgG%2FCVRdwmXqw2XZObrORjbaJ1BD8HF00wzPcZCR9kU5AZ4GRBaU58RvRhZ81xPJy6S5RnZSgqL3NYBSaMgqX4ltKjhBud7Jq%2BL5mJQTipUjs%3D";
+    window.__genspark_locale = "en-US";
+    window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDgMXCKEbPxR7qZiLyEghQBOvY9rIJ/m+8glJs2Lc+Us/WafMvxxu64Q8aytjyFym9i9tQZlDX5u7GNgv6c9C27ATPHUP5H+VttxAPlplkKk8B+yYds79EEhYZ0qsGLIJiQQJ+NZ+2w/bN5SzZ7CMnzk6iJnYJRoR5BvNCfUq2R19A+WViO7J8qli+m+li+fGnZHvMAP+wCMex+r+MaKLYipJbKSdiZd+S/sTZYHs4113S17MtJ1pEqOhAETJP8T96RYo4DdaFUYxeSlP414h00JgR9hr3Vv1mlntFzuM9gEjHBgSeJ8DbTUg+y69hI5dPBYZvsgiC++38yjyNzUIc/NFB2NgPJMYKRDIUirYeX1XWlAiRukt8t6El4nNLh/0r3phbQ37IgarvgabiSMOXoxseMCHGXicwmP8nOCbux4Nwocsw6ReujQi5OFSAFmSIQC8x2q6Bsr6gmL2OBordVOO6xMErsmVPikT7dyJ7+UL9xJLiMPu8m3hywS4bctUWv8bHuD9HixckyyGqUEQiKKXoz4wdmoahBrgBjrRBi3d+Yza5G1NRgVCj2m9wIiKwVkSx6OJCb11G3pTKBuPNwBeQXUnDsplGA3gwNBxSGBgG/CVRdwmXqw2XZObrORjbaJ1BD8HF00wzPcZCR9kU5AZ4GRBaU58RvRhZ81xPJy6S5RnZSgqL3NYBSaMgqX4ltKjhBud7Jq+L5mJQTipUjs=";
+</script>
+
+<script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>

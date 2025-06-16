@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mise en Place du Routage Sécurisé</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+         body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            min-height: 720px;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hexagon {
+            position: absolute;
+            width: 200px;
+            height: 173px;
+            background: rgba(56, 189, 248, 0.05);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        .circuit-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0.3) 50%, rgba(56, 189, 248, 0.1) 100%);
+            z-index: 0;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .network-node {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .network-node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .network-node.esp32 {
+            border-color: #34D399;
+        }
+
+        .network-node.mosquitto {
+            border-color: #38BDF8;
+        }
+
+        .network-node.suricata {
+            border-color: #F87171;
+        }
+
+        .network-line {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.1) 100%);
+            z-index: 0;
+        }
+
+        .arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            z-index: 1;
+        }
+
+        .arrow.right {
+            border-left: 12px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .arrow.left {
+            border-right: 12px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .data-packet {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #38BDF8;
+            z-index: 2;
+            animation: move-packet 3s infinite linear;
+        }
+
+        .data-packet.malicious {
+            background-color: #F87171;
+            animation: move-packet-malicious 3s infinite linear;
+        }
+
+        @keyframes move-packet {
+            0% {
+                transform: translateX(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(200px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes move-packet-malicious {
+            0% {
+                transform: translateX(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(200px);
+                opacity: 0;
+            }
+        }
+
+        .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .pulse {
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% {
+                box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(248, 113, 113, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(248, 113, 113, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide flex flex-col p-10 relative">
+        <!-- Background Elements -->
+        <div class="hexagon opacity-20" style="top: 150px; left: 200px; transform: rotate(15deg);"></div>
+        <div class="hexagon opacity-30" style="top: 350px; right: 220px; transform: rotate(-10deg);"></div>
+        <div class="hexagon opacity-15" style="bottom: 120px; left: 280px; transform: rotate(5deg);"></div>
+
+        <!-- Circuit Lines -->
+        <div class="circuit-line" style="width: 350px; top: 200px; left: 120px; transform: rotate(15deg);"></div>
+        <div class="circuit-line" style="width: 280px; top: 450px; right: 180px; transform: rotate(-8deg);"></div>
+        <div class="circuit-line" style="width: 320px; bottom: 150px; left: 150px; transform: rotate(-12deg);"></div>
+
+        <!-- Header -->
+        <div class="mb-8 z-10">
+            <h1 class="text-4xl font-bold text-white mb-2">Mise en Place du Routage Sécurisé via un Proxy Réseau</h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-sky-500 to-sky-300"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex flex-col items-center z-10 mb-6">
+            <!-- Network Diagram -->
+            <div class="card p-8 w-full relative mb-8" style="height: 350px;" >
+                <!-- ESP32/Wokwi Node -->
+                <div class="network-node esp32 absolute" style="position:relative; top: 100px;  left: 100px;">
+                    <i class="fas fa-microchip text-4xl text-green-400 mb-2"></i>
+                    <span class="text-white font-medium">ESP32</span>
+                    <span class="text-xs text-gray-400">Wokwi</span>
+                    <div class="badge bg-green-500 text-white">IOT</div>
+                </div>
+
+                <!-- Mosquitto Node -->
+                <div class="network-node mosquitto absolute" style="position:relative; top: 10px; ; left: 1100px;">
+                    <i class="fas fa-server text-4xl text-sky-400 mb-2"></i>
+                    <span class="text-white font-medium">Mosquitto</span>
+                    <span class="text-xs text-gray-400">Broker MQTT</span>
+                    <div class="badge bg-sky-500 text-white">1883</div>
+                </div>
+
+                <!-- Suricata Node -->
+                <div class="network-node suricata absolute pulse" style="position:relative; bottom: 110px; ; left: 1950px;">
+                    <i class="fas fa-shield-alt text-4xl text-red-400 mb-2"></i>
+                    <span class="text-white font-medium">Suricata</span>
+                    <span class="text-xs text-gray-400">IDS</span>
+                    <div class="badge bg-red-500 text-white">NIDS</div>
+                </div>
+
+                <!-- Connection Lines -->
+                <div class="network-line" style="width: 230px; top: 90px; left: 240px; transform: rotate(0deg);"></div>
+                <div class="arrow right" style="top: 82px; left: 460px;"></div>
+
+                <!-- Data Packets Animation -->
+                <div class="data-packet" style="top: 85px; left: 280px; animation-delay: 0s;"></div>
+                <div class="data-packet" style="top: 85px; left: 300px; animation-delay: 1s;"></div>
+                <div class="data-packet malicious" style="top: 85px; left: 330px; animation-delay: 2s;"></div>
+
+                <!-- Proxy/Bridge Label -->
+                <div class="absolute" style="top: 140px; left: 300px;">
+                    <div class="px-4 py-2 bg-slate-700 bg-opacity-80 rounded-lg border border-sky-800" style="position: relative; left: -20px;">
+                        <span class="text-sky-300 text-sm font-mono" style="color: bisque;"><i class="fas fa-random mr-1"></i> Interface Proxy/Bridge</span>
+                    </div>
+                </div>
+
+                <!-- Description Labels -->
+                <div class="absolute" style="position:relative; bottom: 130px;  left: 100px; width: 200px;">
+                    <p class="text-white text-sm mb-1 font-semibold"><i class="fas fa-arrow-circle-up text-green-400 mr-1"></i> Envoi de données</p>
+                    <p class="text-gray-300 text-xs">L'ESP32 envoie les données au cloud Wokwi via le protocole MQTT</p>
+                </div>
+
+                <div class="absolute" style="position:relative; bottom:120px; left: 1100px; width: 200px;">
+                    <p class="text-white text-sm mb-1 font-semibold"><i class="fas fa-arrow-circle-down text-sky-400 mr-1"></i> Réception locale</p>
+                    <p class="text-gray-300 text-xs">Le trafic est transmis au broker Mosquitto local pour traitement</p>
+                </div>
+
+                <div class="absolute" style="position:relative; bottom: 180px; ; left: 1950px; width: 200px;">
+                    <p class="text-white text-sm mb-1 font-semibold"><i class="fas fa-eye text-red-400 mr-1"></i> Inspection du trafic</p>
+                    <p class="text-gray-300 text-xs">Suricata analyse passivement tous les paquets transitant par l'interface</p>
+                </div>
+            </div>
+
+            <!-- Information Cards -->
+            <div class="grid grid-cols-3 gap-6 w-full">
+                <!-- ESP32 Card -->
+                <div class="card p-5 flex flex-col items-center">
+                    <div class="bg-green-500 bg-opacity-20 p-3 rounded-full mb-3">
+                        <i class="fas fa-microchip text-2xl text-green-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">ESP32 → Wokwi Cloud</h3>
+                    <ul class="text-sm text-gray-300">
+                        <li class="mb-1 flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Simulation sur Wokwi</li>
+                        <li class="mb-1 flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Publie sur topics MQTT</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Connexion via WebSocket</li>
+                    </ul>
+                </div>
+
+                <!-- Mosquitto Card -->
+                <div class="card p-5 flex flex-col items-center">
+                    <div class="bg-sky-500 bg-opacity-20 p-3 rounded-full mb-3">
+                        <i class="fas fa-server text-2xl text-sky-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Broker Mosquitto Local</h3>
+                    <ul class="text-sm text-gray-300">
+                        <li class="mb-1 flex items-center"><i class="fas fa-check-circle text-sky-400 mr-2"></i> Reçoit les données MQTT</li>
+                        <li class="mb-1 flex items-center"><i class="fas fa-check-circle text-sky-400 mr-2"></i> Port TCP standard 1883</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-sky-400 mr-2"></i> Distribue aux subscribers</li>
+                    </ul>
+                </div>
+
+                <!-- Suricata Card -->
+                <div class="card p-5 flex flex-col items-center">
+                    <div class="bg-red-500 bg-opacity-20 p-3 rounded-full mb-3">
+                        <i class="fas fa-shield-alt text-2xl text-red-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Suricata sur Interface</h3>
+                    <ul class="text-sm text-gray-300">
+                        <li class="mb-1 flex items-center"><i class="fas fa-check-circle text-red-400 mr-2"></i> Mode passif (pas de blocage)</li>
+                        <li class="mb-1 flex items-center"><i class="fas fa-check-circle text-red-400 mr-2"></i> Analyse de paquets en transit</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-400 mr-2"></i> Détection via règles MQTT</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Number -->
+        <div class="absolute bottom-4 right-4 text-gray-400 text-sm">
+            12/31
+        </div>
+    </div>
+</body>
+
+</html>
+<script src='https://www.genspark.ai/slide-inner.js?_v=1'></script>
+<script id="html_badge_script1">
+    window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+        "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDrbxluDTBdyj1xOX4vSVxXADo9v02I4HubL80Xr256RtCIPDaKhCdpj%2BsIFWVHNgj3P1x91taQbaLGfARMirvdyjIRLCH%2B3tyxnoXnVzpvDZxzwbrHAOAh%2F42r4E6epn1XTpjhtyHLLKWGuUbRAE0g0Kz3a1r6wBICrp9P7p3G90YxVwt2QkNLc%2BQa2dFHOwfJevrcCS4J15S2qWH5h%2BZTb3Bw7Xm%2FSpG8W34LiNDqHebu8RZHpLPwpjpWE38SwV9I%2BN2TUnCCKDTyG%2B2Yolhoav%2BHZAP0FitdY6Z1sBGC8ehTF9x1QqXHFXsC%2BuB%2BxPUbp1OEYua3%2BQs2lhH5TX2f5fWzdVeK81KUrXKp8V7SHF%2F%2BnoMn6%2B56Xh43zAIxKuyhqK%2BMsCoKoJbdJgUlwW5l6p8XZtnufHWEGwSGI5Y4MIZnslSNzWSo3T7Hr3WATJAXasp5JonnKxbIHhhnfEaGWnhVECBMb82ekOf%2FVZBidrvKm4g%2By%2BKEmBC6ZcZtRb3G6mAU9xpu0y0oD87KB4h76oh2bLOkPCD1Ai26HM8IkN8Ms6YJKpxArhy94X%2FMlG6NuOs0VvGDMrErQbySrkmpXGP1PKP098%2B%2FCByw3lSvXI5TQAqjcNMHyZYTuuOQQnhCge%2Br%2BI9EI6hiwmGok7%2FRCtHpjrXaMgJFw50H4I0XE2B5ASq8jTMCPIr3EAbS9Fb9f2sIrI9WFO7%2FtxPDfrOxk%3D";
+    window.__genspark_locale = "en-US";
+    window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDrbxluDTBdyj1xOX4vSVxXADo9v02I4HubL80Xr256RtCIPDaKhCdpj+sIFWVHNgj3P1x91taQbaLGfARMirvdyjIRLCH+3tyxnoXnVzpvDZxzwbrHAOAh/42r4E6epn1XTpjhtyHLLKWGuUbRAE0g0Kz3a1r6wBICrp9P7p3G90YxVwt2QkNLc+Qa2dFHOwfJevrcCS4J15S2qWH5h+ZTb3Bw7Xm/SpG8W34LiNDqHebu8RZHpLPwpjpWE38SwV9I+N2TUnCCKDTyG+2Yolhoav+HZAP0FitdY6Z1sBGC8ehTF9x1QqXHFXsC+uB+xPUbp1OEYua3+Qs2lhH5TX2f5fWzdVeK81KUrXKp8V7SHF/+noMn6+56Xh43zAIxKuyhqK+MsCoKoJbdJgUlwW5l6p8XZtnufHWEGwSGI5Y4MIZnslSNzWSo3T7Hr3WATJAXasp5JonnKxbIHhhnfEaGWnhVECBMb82ekOf/VZBidrvKm4g+y+KEmBC6ZcZtRb3G6mAU9xpu0y0oD87KB4h76oh2bLOkPCD1Ai26HM8IkN8Ms6YJKpxArhy94X/MlG6NuOs0VvGDMrErQbySrkmpXGP1PKP098+/CByw3lSvXI5TQAqjcNMHyZYTuuOQQnhCge+r+I9EI6hiwmGok7/RCtHpjrXaMgJFw50H4I0XE2B5ASq8jTMCPIr3EAbS9Fb9f2sIrI9WFO7/txPDfrOxk=";
+</script>
+
+<script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>
