@@ -195,18 +195,16 @@
 
         <!-- Header -->
         <div class="mb-8 z-10">
-            <h1 class="text-4xl font-bold text-white mb-2">Mise en Place du Routage Sécurisé via un Proxy Réseau
-
-</h1>
+            <h1 class="text-4xl font-bold text-white mb-2">Mise en Place du Routage Sécurisé via un Proxy Réseau</h1>
             <div class="w-24 h-1 bg-gradient-to-r from-sky-500 to-sky-300"></div>
         </div>
 
         <!-- Main Content -->
         <div class="flex flex-col items-center z-10 mb-6">
             <!-- Network Diagram -->
-            <div class="card p-8 w-full relative mb-8" style="height: 380px;">
+            <div class="card p-8 w-full relative mb-8"  >
                 <!-- ESP32/Wokwi Node -->
-                <div class="network-node esp32 absolute" style="top: 50px; left: 200px;">
+                <div class="network-node esp32 absolute" style="position:relative; top: 130px;  left: 300px;">
                     <i class="fas fa-microchip text-4xl text-green-400 mb-2"></i>
                     <span class="text-white font-medium">ESP32</span>
                     <span class="text-xs text-gray-400">Wokwi</span>
@@ -214,7 +212,7 @@
                 </div>
 
                 <!-- Mosquitto Node -->
-                <div class="network-node mosquitto absolute" style="top: 50px; left: 550px;">
+                <div class="network-node mosquitto absolute" style="position:relative; top: 10px; ; left: 1100px;">
                     <i class="fas fa-server text-4xl text-sky-400 mb-2"></i>
                     <span class="text-white font-medium">Mosquitto</span>
                     <span class="text-xs text-gray-400">Broker MQTT</span>
@@ -222,7 +220,7 @@
                 </div>
 
                 <!-- Suricata Node -->
-                <div class="network-node suricata absolute pulse" style="top: 200px; left: 375px;">
+                <div class="network-node suricata absolute pulse" style="position:relative; bottom: 110px; ; left: 1950px;">
                     <i class="fas fa-shield-alt text-4xl text-red-400 mb-2"></i>
                     <span class="text-white font-medium">Suricata</span>
                     <span class="text-xs text-gray-400">IDS</span>
@@ -240,23 +238,23 @@
 
                 <!-- Proxy/Bridge Label -->
                 <div class="absolute" style="top: 140px; left: 300px;">
-                    <div class="px-4 py-2 bg-slate-700 bg-opacity-80 rounded-lg border border-sky-800">
+                    <div class="px-4 py-2 bg-slate-700 bg-opacity-80 rounded-lg border border-sky-800" style="position: relative; left: 160px;">
                         <span class="text-sky-300 text-sm font-mono"><i class="fas fa-random mr-1"></i> Interface Proxy/Bridge</span>
                     </div>
                 </div>
 
                 <!-- Description Labels -->
-                <div class="absolute" style="top: 270px; left: 100px; width: 200px;">
+                <div class="absolute" style="position:relative; bottom: 70px;  left: 290px; width: 200px;">
                     <p class="text-white text-sm mb-1 font-semibold"><i class="fas fa-arrow-circle-up text-green-400 mr-1"></i> Envoi de données</p>
                     <p class="text-gray-300 text-xs">L'ESP32 envoie les données au cloud Wokwi via le protocole MQTT</p>
                 </div>
 
-                <div class="absolute" style="top: 270px; left: 500px; width: 200px;">
+                <div class="absolute" style="position:relative; bottom:120px; left: 1100px; width: 200px;">
                     <p class="text-white text-sm mb-1 font-semibold"><i class="fas fa-arrow-circle-down text-sky-400 mr-1"></i> Réception locale</p>
                     <p class="text-gray-300 text-xs">Le trafic est transmis au broker Mosquitto local pour traitement</p>
                 </div>
 
-                <div class="absolute" style="top: 320px; left: 300px; width: 200px;">
+                <div class="absolute" style="position:relative; bottom: 180px; ; left: 1950px; width: 200px;">
                     <p class="text-white text-sm mb-1 font-semibold"><i class="fas fa-eye text-red-400 mr-1"></i> Inspection du trafic</p>
                     <p class="text-gray-300 text-xs">Suricata analyse passivement tous les paquets transitant par l'interface</p>
                 </div>

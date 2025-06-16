@@ -138,10 +138,7 @@
         <!-- Architecture Diagram -->
         <div class="diagram-container z-10">
             <div class="mermaid">
-                graph LR ESP32["ESP32"] -->|Publie MQTT| BROKER["Mosquitto Broker"] BROKER -->|Inspecté par| SURICATA["Suricata IDS"] BROKER -->|Flux de données| NODE["Node-RED"] NODE -->|Stocke événements| INFLUX["InfluxDB"] SURICATA -->|Alerte d'intrusion| NODE NODE
-                -->|Notification| TWILIO["Twilio"] classDef esp fill:#4B5563,stroke:#38BDF8,color:#fff,stroke-width:2px classDef broker fill:#1F2937,stroke:#38BDF8,color:#fff,stroke-width:2px classDef ids fill:#374151,stroke:#F87171,color:#fff,stroke-width:2px
-                classDef node fill:#1F2937,stroke:#38BDF8,color:#fff,stroke-width:2px classDef db fill:#1F2937,stroke:#38BDF8,color:#fff,stroke-width:2px classDef twilio fill:#1F2937,stroke:#38BDF8,color:#fff,stroke-width:2px class ESP32 esp class BROKER
-                broker class SURICATA ids class NODE node class INFLUX db class TWILIO twilio
+                
             </div>
         </div>
 
