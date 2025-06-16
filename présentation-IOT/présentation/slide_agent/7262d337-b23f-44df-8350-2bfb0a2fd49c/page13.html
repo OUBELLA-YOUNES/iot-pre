@@ -174,18 +174,7 @@
                             <p class="text-sm text-gray-300">Analyse sémantique des logs Suricata</p>
                         </div>
                     </div>
-                    <div class="code-block" style="border-left-color: #F87171;">
-                        <span class="text-purple-400">function</span> <span class="text-sky-300">detectIntrusion</span>(<span class="text-amber-300">msg</span>) {
-                        <span class="text-purple-400">const</span> <span class="text-sky-300">keywords</span> = [<span class="text-green-300">"suspicious"</span>, <span class="text-green-300">"intrusion"</span>, <span class="text-green-300">"attack"</span>];
-                        <span class="text-purple-400">const</span> <span class="text-sky-300">logContent</span> = <span class="text-amber-300">msg.payload</span>;
-
-                        <span class="text-purple-400">for</span>(<span class="text-purple-400">let</span> <span class="text-sky-300">keyword</span> <span class="text-purple-400">of</span> <span class="text-sky-300">keywords</span>) {
-                        <span class="text-purple-400">if</span>(<span class="text-sky-300">logContent</span>.includes(<span class="text-sky-300">keyword</span>)) {
-                        <span class="text-amber-300">msg.threat</span> = <span class="text-green-300">"high"</span>;
-                        <span class="text-purple-400">return</span> <span class="text-amber-300">msg</span>; } }
-                        <span class="text-purple-400">return</span> <span class="text-amber-300">null</span>; }
-                        </pre>
-                    </div>
+                    
                 </div>
 
                 <!-- Twilio SMS Function -->
@@ -199,17 +188,7 @@
                             <p class="text-sm text-gray-300">Alertes Twilio en temps réel</p>
                         </div>
                     </div>
-                    <div class="code-block" style="border-left-color: #8B5CF6;">
-                        <span class="text-purple-400">function</span> <span class="text-sky-300">createTwilioMessage</span>(<span class="text-amber-300">msg</span>) {
-                        <span class="text-gray-400">// Format utile pour Twilio</span>
-                        <span class="text-amber-300">msg.payload</span> = {
-                        <span class="text-green-300">"to"</span>: <span class="text-green-300">"+33612345678"</span>,
-                        <span class="text-green-300">"body"</span>: <span class="text-green-300">`ALERTE: Intrusion détectée! 
-Type: ${</span><span class="text-amber-300">msg.alert.type</span><span class="text-green-300">}
-IP Source: ${</span><span class="text-amber-300">msg.alert.source_ip</span><span class="text-green-300">}`</span> };
-                        <span class="text-purple-400">return</span> <span class="text-amber-300">msg</span>; }
-                        </pre>
-                    </div>
+                    <!-- ici page13.html-->
                 </div>
             </div>
 
@@ -226,21 +205,7 @@ IP Source: ${</span><span class="text-amber-300">msg.alert.source_ip</span><span
                             <p class="text-sm text-gray-300">Parsing ligne par ligne des logs Suricata</p>
                         </div>
                     </div>
-                    <div class="code-block" style="border-left-color: #38BDF8;">
-                        <span class="text-purple-400">function</span> <span class="text-sky-300">parseSuricataLog</span>(<span class="text-amber-300">msg</span>) {
-                        <span class="text-purple-400">const</span> <span class="text-sky-300">logLine</span> = <span class="text-amber-300">msg.payload</span>;
-                        <span class="text-purple-400">const</span> <span class="text-sky-300">regex</span> = <span class="text-green-300">/\[(.*?)\] \[(.*?)\] (.*?) \[/</span>;
-                        <span class="text-purple-400">const</span> <span class="text-sky-300">matches</span> = <span class="text-sky-300">logLine</span>.match(<span class="text-sky-300">regex</span>);
-
-                        <span class="text-purple-400">if</span> (<span class="text-sky-300">matches</span>) {
-                        <span class="text-amber-300">msg.alert</span> = {
-                        <span class="text-green-300">"sid"</span>: <span class="text-sky-300">matches</span>[1],
-                        <span class="text-green-300">"type"</span>: <span class="text-sky-300">matches</span>[3],
-                        <span class="text-green-300">"source_ip"</span>: <span class="text-sky-300">logLine</span>.match(<span class="text-green-300">/\{.*?\} (.*?) ->/</span>)[1] };
-                        <span class="text-purple-400">return</span> <span class="text-amber-300">msg</span>; }
-                        <span class="text-purple-400">return</span> <span class="text-amber-300">null</span>; }
-                        </pre>
-                    </div>
+                    
                 </div>
 
                 <!-- Key Features Overview -->
